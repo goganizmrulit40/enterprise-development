@@ -54,7 +54,20 @@ public static class DataSeed
             new() { Passport = "0000 524267", FullName = "Родионов Михаил Петрович",        Specialization = Specialization.Diagnostics,    Experience = 3  }
         };
         
-        var works = new List<WorkType>();
+        var works = new List<WorkType>()
+        {
+            new() { Name = "Правка вмятины крыла",       Category = "Body",         Price = 6500,  Duration = TimeSpan.FromHours(4)    },
+            new() { Name = "Диагностика ходовой",        Category = "Diagnostics",  Price = 3200,  Duration = TimeSpan.FromHours(1)    },
+            new() { Name = "Замена тормозных дисков",    Category = "Brakes",       Price = 8900,  Duration = TimeSpan.FromHours(2)    },
+            new() { Name = "Ремонт ГБЦ",                 Category = "Engine",       Price = 42000, Duration = TimeSpan.FromHours(12)   },
+            new() { Name = "Замена ремня ГРМ",           Category = "Engine",       Price = 18500, Duration = TimeSpan.FromHours(5)    },
+            new() { Name = "Компьютерная диагностика",   Category = "Diagnostics",  Price = 2400,  Duration = TimeSpan.FromMinutes(50) },
+            new() { Name = "Замена АКБ",                 Category = "Electrical",   Price = 1500,  Duration = TimeSpan.FromMinutes(20) },
+            new() { Name = "Покраска бампера",           Category = "Painting",     Price = 16000, Duration = TimeSpan.FromHours(8)    },
+            new() { Name = "Замена амортизаторов",       Category = "Suspension",   Price = 9500,  Duration = TimeSpan.FromHours(3)    },
+            new() { Name = "Ремонт МКПП",                Category = "Transmission", Price = 35000, Duration = TimeSpan.FromHours(10)   }
+        };
+
         var orders = new List<Order>();
 
         return (clients, cars, mechanics, works, orders);
