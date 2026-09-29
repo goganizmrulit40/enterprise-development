@@ -1,7 +1,7 @@
 namespace AutoService.Domain.Models;
 
 /// <summary>
-/// Специализация механики автосервиса
+/// Специализация механика автосервиса
 /// </summary>
 public enum Specialization
 {
