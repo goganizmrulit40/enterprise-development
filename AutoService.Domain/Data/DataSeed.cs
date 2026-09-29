@@ -39,8 +39,21 @@ public static class DataSeed
             new() { LicensePlate = "У391АК 16", Brand = "VW",      Model = "Polo",    Year = 2008, ClientId = clients[8].Id },
             new() { LicensePlate = "Р527ОМ 34", Brand = "Nissan",  Model = "Qashqai", Year = 2026, ClientId = clients[9].Id }
         };
+
+        var mechanics = new List<Mechanic>()
+        {
+            new() { Passport = "8888 123345", FullName = "Кириллов Кирилл Кириллович",      Specialization = Specialization.Engine,         Experience = 11 },
+            new() { Passport = "7777 123243", FullName = "Романова Ольга Владимировна",     Specialization = Specialization.Transmission,   Experience = 8  },
+            new() { Passport = "6666 213123", FullName = "Гусеев Гусь Гусевич",             Specialization = Specialization.Electrical,     Experience = 6  },
+            new() { Passport = "5555 324255", FullName = "Комаров Комар Комарович",         Specialization = Specialization.Body,           Experience = 14 },
+            new() { Passport = "4444 543546", FullName = "Мошкова Мошка Мошковна",          Specialization = Specialization.Diagnostics,    Experience = 5  },
+            new() { Passport = "3333 456546", FullName = "Тараканов Таракан Тараканович",   Specialization = Specialization.Suspension,     Experience = 9  },
+            new() { Passport = "2222 879789", FullName = "Тараканов Торт Тортович",         Specialization = Specialization.Brakes,         Experience = 7  },
+            new() { Passport = "1111 674667", FullName = "Горева Зима Владимировна",        Specialization = Specialization.Painting,       Experience = 12 },
+            new() { Passport = "9999 812812", FullName = "Веснова Весна Владимировна",      Specialization = Specialization.Engine,         Experience = 17 },
+            new() { Passport = "0000 524267", FullName = "Родионов Михаил Петрович",        Specialization = Specialization.Diagnostics,    Experience = 3  }
+        };
         
-        var mechanics = new List<Mechanic>();
         var works = new List<WorkType>();
         var orders = new List<Order>();
 
