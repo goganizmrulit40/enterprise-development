@@ -13,12 +13,12 @@ public class WorkType
     /// <summary>
     /// Название работы
     /// </summary>
-    public string Name { get; set; } = "";
+    public required string Name { get; set; }
 
     /// <summary>
     /// Категория работы
     /// </summary>
-    public string Category { get; set; } = "";
+    public required string Category { get; set; }
 
     /// <summary>
     /// Стоимость работы, р.

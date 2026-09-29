@@ -13,12 +13,12 @@ public class Mechanic
     /// <summary>
     /// Номер паспорта
     /// </summary>
-    public string Passport { get; set; } = "";
+    public required string Passport { get; set; }
     
     /// <summary>
     /// ФИО механика
     /// </summary>
-    public string FullName { get; set; } = "";
+    public required string FullName { get; set; }
     
     /// <summary>
     /// Специализация механика

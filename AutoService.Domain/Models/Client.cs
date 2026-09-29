@@ -13,12 +13,12 @@ public class Client
     /// <summary>
     /// ФИО клиента
     /// </summary>
-    public string FullName { get; set; } = "";
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Телефон клиента
     /// </summary>
-    public string Phone { get; set; } = "";
+    public required string Phone { get; set; }
 
     /// <summary>
     /// Список авто клиента
