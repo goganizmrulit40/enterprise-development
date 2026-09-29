@@ -26,7 +26,20 @@ public static class DataSeed
             new() { FullName = "Андреев Андрей Андреевич",          Phone = "+71234567899" }
         };
 
-        var cars = new List<Car>();
+        var cars = new List<Car>()
+        {
+            new() { LicensePlate = "Т812КМ 78", Brand = "Skoda",   Model = "Octavia", Year = 2000, ClientId = clients[0].Id },
+            new() { LicensePlate = "Н217УВ 47", Brand = "Kia",     Model = "Rio",     Year = 2001, ClientId = clients[1].Id },
+            new() { LicensePlate = "М903АС 99", Brand = "Lada",    Model = "Vesta",   Year = 2002, ClientId = clients[2].Id },
+            new() { LicensePlate = "Е441РТ 67", Brand = "Hyundai", Model = "Creta",   Year = 2003, ClientId = clients[3].Id },
+            new() { LicensePlate = "В562НХ 52", Brand = "Mazda",   Model = "CX-5",    Year = 2004, ClientId = clients[4].Id },
+            new() { LicensePlate = "К119МУ 178",Brand = "Chery",   Model = "Tiggo 7", Year = 2005, ClientId = clients[5].Id },
+            new() { LicensePlate = "О774ВС 23", Brand = "Toyota",  Model = "Camry",   Year = 2006, ClientId = clients[6].Id },
+            new() { LicensePlate = "С528ТЕ 64", Brand = "Renault", Model = "Duster",  Year = 2007, ClientId = clients[7].Id },
+            new() { LicensePlate = "У391АК 16", Brand = "VW",      Model = "Polo",    Year = 2008, ClientId = clients[8].Id },
+            new() { LicensePlate = "Р527ОМ 34", Brand = "Nissan",  Model = "Qashqai", Year = 2026, ClientId = clients[9].Id }
+        };
+        
         var mechanics = new List<Mechanic>();
         var works = new List<WorkType>();
         var orders = new List<Order>();
