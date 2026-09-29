@@ -23,5 +23,5 @@ public class Client
     /// <summary>
     /// Список авто клиента
     /// </summary>
-    public List<Car> Cars { get; set; } = new();
+    public required List<Car> Cars { get; set; } = [];
 }
