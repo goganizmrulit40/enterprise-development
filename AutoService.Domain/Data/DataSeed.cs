@@ -68,7 +68,31 @@ public static class DataSeed
             new() { Name = "Ремонт МКПП",                Category = "Transmission", Price = 35000, Duration = TimeSpan.FromHours(10)   }
         };
 
-        var orders = new List<Order>();
+        var now = DateTime.UtcNow;
+
+        var orders = new List<Order>()
+        {
+            new() { CarId = cars[0].Id, ClientId = clients[0].Id, MechanicId = mechanics[0].Id,
+                    Works = new() { works[0], works[1] }, AcceptedAt = now.AddDays(-25), IssuedAt = now.AddDays(-25) },
+            new() { CarId = cars[1].Id, ClientId = clients[1].Id, MechanicId = mechanics[2].Id,
+                    Works = new() { works[6] },           AcceptedAt = now.AddDays(-22), IssuedAt = now.AddDays(-22) },
+            new() { CarId = cars[2].Id, ClientId = clients[2].Id, MechanicId = mechanics[5].Id,
+                    Works = new() { works[2] },           AcceptedAt = now.AddDays(-18), IssuedAt = now.AddDays(-18) },
+            new() { CarId = cars[3].Id, ClientId = clients[3].Id, MechanicId = mechanics[4].Id,
+                    Works = new() { works[5] },           AcceptedAt = now.AddDays(-15), IssuedAt = now.AddDays(-15) },
+            new() { CarId = cars[4].Id, ClientId = clients[4].Id, MechanicId = mechanics[1].Id,
+                    Works = new() { works[9] },           AcceptedAt = now.AddDays(-12), IssuedAt = now.AddDays(-11) },
+            new() { CarId = cars[5].Id, ClientId = clients[5].Id, MechanicId = mechanics[3].Id,
+                    Works = new() { works[7] },           AcceptedAt = now.AddDays(-9),  IssuedAt = now.AddDays(-8) },
+            new() { CarId = cars[6].Id, ClientId = clients[6].Id, MechanicId = mechanics[8].Id,
+                    Works = new() { works[3] },           AcceptedAt = now.AddDays(-7),  IssuedAt = now.AddDays(-5) },
+            new() { CarId = cars[7].Id, ClientId = clients[7].Id, MechanicId = mechanics[6].Id,
+                    Works = new() { works[2], works[6] }, AcceptedAt = now.AddDays(-4),  IssuedAt = null },
+            new() { CarId = cars[8].Id, ClientId = clients[8].Id, MechanicId = mechanics[9].Id,
+                    Works = new() { works[1], works[5] }, AcceptedAt = now.AddDays(-2),  IssuedAt = null },
+            new() { CarId = cars[9].Id, ClientId = clients[9].Id, MechanicId = mechanics[0].Id,
+                    Works = new() { works[4] },           AcceptedAt = now.AddDays(-1),  IssuedAt = null }
+        };
 
         return (clients, cars, mechanics, works, orders);
     }
