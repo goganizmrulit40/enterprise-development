@@ -91,7 +91,11 @@ public static class DataSeed
             new() { CarId = cars[8].Id, ClientId = clients[8].Id, MechanicId = mechanics[9].Id,
                     Works = new() { works[1], works[5] }, AcceptedAt = now.AddDays(-2),  IssuedAt = null },
             new() { CarId = cars[9].Id, ClientId = clients[9].Id, MechanicId = mechanics[0].Id,
-                    Works = new() { works[4] },           AcceptedAt = now.AddDays(-1),  IssuedAt = null }
+                    Works = new() { works[4] },           AcceptedAt = now.AddDays(-1),  IssuedAt = null },
+            new() { CarId = cars[0].Id, ClientId = clients[0].Id, MechanicId = mechanics[0].Id,
+                    Works = new() { works[0] },           AcceptedAt = now.AddDays(-3),  IssuedAt = null },
+            new() { CarId = cars[0].Id, ClientId = clients[0].Id, MechanicId = mechanics[4].Id,
+                    Works = new() { works[1] },           AcceptedAt = now.AddDays(-2),  IssuedAt = null }
         };
 
         return (clients, cars, mechanics, works, orders);

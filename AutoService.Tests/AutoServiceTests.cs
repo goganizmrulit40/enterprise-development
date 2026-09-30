@@ -73,4 +73,29 @@ public class AutoServiceTests
         var sorted = clients.OrderBy(c => c.FullName).ToList();
         Assert.Equal(sorted, clients);
     }
+
+        
+    /// <summary>
+    /// Тест 3: кол-во клиентов с повторным обращением за последний месяц
+    /// </summary>
+    [Fact]
+    public void GetRepeatClientsLastMonth()
+    {
+        var monthAgo = DateTime.UtcNow.AddDays(-30);
+
+        var grouped = _orders
+            .Where(o => o.AcceptedAt >= monthAgo)
+            .GroupBy(o => o.ClientId)
+            .Select(g => new { ClientId = g.Key, Count = g.Count() })
+            .Where(x => x.Count > 1)
+            .ToList();
+
+        foreach (var g in grouped)
+        {
+            var client = _clients.First(c => c.Id == g.ClientId);
+            _output.WriteLine($"{client.FullName}: {g.Count} обращения");
+        }
+
+        Assert.NotEmpty(grouped);
+    }
 }
