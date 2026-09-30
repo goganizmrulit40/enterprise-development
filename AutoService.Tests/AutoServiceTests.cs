@@ -117,4 +117,26 @@ public class AutoServiceTests
         Assert.Equal(order.TotalCost, total);
         Assert.True(total > 0);
     }
+
+    /// <summary>
+    /// Тест 5: топ 5 наиболее частых видов работ
+    /// </summary>
+    [Fact]
+    public void GetTop5Works()
+    {
+        var top = _orders
+            .SelectMany(o => o.Works)
+            .GroupBy(w => w.Name)
+            .Select(g => new { Name = g.Key, Count = g.Count() })
+            .OrderByDescending(x => x.Count)
+            .ThenBy(x => x.Name)
+            .Take(5)
+            .ToList();
+
+        foreach (var t in top)
+            _output.WriteLine($"{t.Name}: {t.Count}");
+
+        Assert.True(top.Count > 0);
+        Assert.True(top.Count <= 5);
+    }
 }
