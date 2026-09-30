@@ -24,4 +24,24 @@ public class AutoServiceTests
         _output = output;
         (_clients, _cars, _mechanics, _works, _orders) = DataSeed.Create();
     }
+
+    /// <summary>
+    /// Тест 1: механики по виду работ
+    /// </summary> 
+    [Fact]
+    public void GetMechanicsByWorkCategory()
+    {
+        var work = _works.First(w => w.Name == "Ремонт ГБЦ");
+
+        var result = _mechanics
+            .Where(m => m.Specialization.ToString() == work.Category)
+            .OrderBy(m => m.FullName)
+            .ToList();
+
+        foreach (var m in result)
+            _output.WriteLine($"{m.FullName} — {m.Specialization}");
+
+        Assert.NotEmpty(result);
+        Assert.All(result, m => Assert.Equal(work.Category, m.Specialization.ToString()));
+    }
 }
