@@ -48,7 +48,7 @@
 
 С помощью команды 
 ```commandline
-"dotnet test"
+dotnet test
 ```
 получим результат выполнения:
 ```commandline
@@ -60,7 +60,11 @@
   длительность: 1s 142ms
 ```
 
-Команда "dotnet run --project AutoService.Tests -- -showLiveOutput" даёт более подробную информацию о тестах:
+Команда 
+```commandline
+dotnet run --project AutoService.Tests -- -showLiveOutput
+```
+даёт более подробную информацию о тестах:
 ```commandline
  AutoService.Tests.AutoServiceTests.GetRepeatClientsLastMonth [OUTPUT] Иванов
  Иван Иванович: 3 обращения
