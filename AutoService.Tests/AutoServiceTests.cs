@@ -74,7 +74,6 @@ public class AutoServiceTests
         Assert.Equal(sorted, clients);
     }
 
-        
     /// <summary>
     /// Тест 3: кол-во клиентов с повторным обращением за последний месяц
     /// </summary>
@@ -97,5 +96,25 @@ public class AutoServiceTests
         }
 
         Assert.NotEmpty(grouped);
+    }
+
+    /// <summary>
+    /// Тест 4: суммарная стоимость работ для выбранного заказа
+    /// </summary>
+    [Fact]
+    public void GetOrderTotalCost()
+    {
+        var order = _orders.First(o => o.Works.Count > 1);
+
+        var total = order.Works.Sum(w => w.Price);
+        var car = _cars.First(c => c.Id == order.CarId);
+
+        _output.WriteLine($"Авто: {car.Brand} {car.Model} ({car.LicensePlate})");
+        foreach (var w in order.Works)
+            _output.WriteLine($"  {w.Name}: {w.Price} р.");
+        _output.WriteLine($"Итого: {total} р.");
+
+        Assert.Equal(order.TotalCost, total);
+        Assert.True(total > 0);
     }
 }
