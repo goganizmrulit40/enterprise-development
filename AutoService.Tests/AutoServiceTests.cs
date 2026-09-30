@@ -31,7 +31,7 @@ public class AutoServiceTests
     [Fact]
     public void GetMechanicsByWorkCategory()
     {
-        var work = _works.First(w => w.Name == "Ремонт ГБЦ");
+        var work = _works.First(w => w.Name == "Диагностика ходовой");
 
         var result = _mechanics
             .Where(m => m.Specialization.ToString() == work.Category)
@@ -43,5 +43,34 @@ public class AutoServiceTests
 
         Assert.NotEmpty(result);
         Assert.All(result, m => Assert.Equal(work.Category, m.Specialization.ToString()));
+    }
+
+    /// <summary>
+    /// Тест 2: клиенты указанного механика, упорядоченные по ФИО
+    /// </summary>
+    [Fact]
+    public void GetClientsByMechanic()
+    {
+        var mechanic = _mechanics.First(m => m.Specialization == Specialization.Engine);
+
+        var clientIds = _orders
+            .Where(o => o.MechanicId == mechanic.Id)
+            .Select(o => o.ClientId)
+            .Distinct()
+            .ToList();
+
+        var clients = _clients
+            .Where(c => clientIds.Contains(c.Id))
+            .OrderBy(c => c.FullName)
+            .ToList();
+
+        _output.WriteLine($"Механик: {mechanic.FullName}");
+        foreach (var c in clients)
+            _output.WriteLine($"{c.FullName} — {c.Phone}");
+
+        Assert.NotEmpty(clients);
+
+        var sorted = clients.OrderBy(c => c.FullName).ToList();
+        Assert.Equal(sorted, clients);
     }
 }
