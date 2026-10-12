@@ -300,7 +300,7 @@ public static class DataSeed
 
     private static List<Order> CreateOrders()
     {
-        var now = DateTime.UtcNow;
+        var now = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Local);
 
         return[
             new()

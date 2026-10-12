@@ -18,7 +18,7 @@ public class AutoServiceTests
 
     /// <summary>
     /// Конструктор класса
-    /// </summary>  
+    /// </summary>
     public AutoServiceTests(ITestOutputHelper output)
     {
         _output = output;
@@ -31,7 +31,7 @@ public class AutoServiceTests
 
     /// <summary>
     /// Тест 1: механики по виду работ
-    /// </summary> 
+    /// </summary>
     [Fact]
     public void GetMechanicsByWorkCategory()
     {
@@ -84,7 +84,7 @@ public class AutoServiceTests
     [Fact]
     public void GetRepeatClientsLastMonth()
     {
-        var monthAgo = DateTime.UtcNow.AddDays(-30);
+        var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Local).AddDays(-30);
 
         var grouped = _orders
             .Where(o => o.AcceptedAt >= monthAgo)
