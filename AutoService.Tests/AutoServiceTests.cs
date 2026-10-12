@@ -22,7 +22,11 @@ public class AutoServiceTests
     public AutoServiceTests(ITestOutputHelper output)
     {
         _output = output;
-        (_clients, _cars, _mechanics, _works, _orders) = DataSeed.Create();
+        _clients = DataSeed.Clients;
+        _cars = DataSeed.Cars;
+        _mechanics = DataSeed.Mechanics;
+        _works = DataSeed.Works;
+        _orders = DataSeed.Orders;
     }
 
     /// <summary>
