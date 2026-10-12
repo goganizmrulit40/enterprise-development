@@ -1,6 +1,5 @@
 using AutoService.Domain.Data;
 using AutoService.Domain.Models;
-using Xunit;
 
 namespace AutoService.Tests;
 
