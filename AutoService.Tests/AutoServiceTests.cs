@@ -18,16 +18,21 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     {
         var work = fixture.Works.First(w => w.Name == DiagnosticsWorkName);
 
-        var result = fixture.Mechanics
+        var actual  = fixture.Mechanics
             .Where(m => m.Specialization.ToString() == work.Category)
             .OrderBy(m => m.FullName)
             .ToList();
 
-        foreach (var m in result)
+        foreach (var m in actual)
             output.WriteLine($"{m.FullName} — {m.Specialization}");
 
-        Assert.NotEmpty(result);
-        Assert.All(result, m => Assert.Equal(work.Category, m.Specialization.ToString()));
+        var expected = new[]
+        {
+            "Мошкова Мошка Мошковна",
+            "Родионов Михаил Петрович"
+        };
+
+        Assert.Equal(expected, actual.Select(m => m.FullName).ToList());
     }
 
     /// <summary>
@@ -44,19 +49,22 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
             .Distinct()
             .ToList();
 
-        var clients = fixture.Clients
+        var actual = fixture.Clients
             .Where(c => clientIds.Contains(c.Id))
             .OrderBy(c => c.FullName)
             .ToList();
 
         output.WriteLine($"Механик: {mechanic.FullName}");
-        foreach (var c in clients)
+        foreach (var c in actual)
             output.WriteLine($"{c.FullName} — {c.Phone}");
 
-        Assert.NotEmpty(clients);
+        var expected = new[]
+        {
+            "Андреев Андрей Андреевич",
+            "Иванов Иван Иванович"
+        };
 
-        var sorted = clients.OrderBy(c => c.FullName).ToList();
-        Assert.Equal(sorted, clients);
+        Assert.Equal(expected, actual.Select(c => c.FullName).ToList());
     }
 
     /// <summary>
@@ -67,20 +75,20 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     {
         var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Local).AddDays(-30);
 
-        var grouped = fixture.Orders
+        var actual = fixture.Orders
             .Where(o => o.AcceptedAt >= monthAgo)
             .GroupBy(o => o.ClientId)
-            .Select(g => new { ClientId = g.Key, Count = g.Count() })
-            .Where(x => x.Count > 1)
+            .Where(g => g.Count() > 1)
+            .Select(g => new { Client = fixture.Clients.First(c => c.Id == g.Key), Count = g.Count() })
+            .OrderBy(x => x.Client.FullName)
             .ToList();
 
-        foreach (var g in grouped)
-        {
-            var client = fixture.Clients.First(c => c.Id == g.ClientId);
-            output.WriteLine($"{client.FullName}: {g.Count} обращения");
-        }
+        foreach (var g in actual)
+            output.WriteLine($"{g.Client.FullName}: {g.Count} обращения");
 
-        Assert.NotEmpty(grouped);
+        var expected = new[] { "Иванов Иван Иванович" };
+
+        Assert.Equal(expected, actual.Select(x => x.Client.FullName).ToList());
     }
 
     /// <summary>
@@ -99,8 +107,7 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
             output.WriteLine($"  {w.Name}: {w.Price} р.");
         output.WriteLine($"Итого: {total} р.");
 
-        Assert.Equal(order.TotalCost, total);
-        Assert.True(total > 0);
+        Assert.Equal(9700m, total);
     }
 
     /// <summary>
@@ -109,7 +116,7 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetTop5Works()
     {
-        var top = fixture.Orders
+        var actual = fixture.Orders
             .SelectMany(o => o.Works)
             .GroupBy(w => w.Name)
             .Select(g => new { Name = g.Key, Count = g.Count() })
@@ -118,10 +125,18 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
             .Take(5)
             .ToList();
 
-        foreach (var t in top)
+        foreach (var t in actual)
             output.WriteLine($"{t.Name}: {t.Count}");
 
-        Assert.True(top.Count > 0);
-        Assert.True(top.Count <= 5);
+        var expected = new[]
+        {
+            "Диагностика ходовой",
+            "Замена АКБ",
+            "Замена тормозных дисков",
+            "Компьютерная диагностика",
+            "Правка вмятины крыла"
+        };
+
+        Assert.Equal(expected, actual.Select(x => x.Name).ToList());
     }
 }
