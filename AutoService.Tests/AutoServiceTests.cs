@@ -43,14 +43,8 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     {
         var mechanic = fixture.Mechanics.First(m => m.Specialization == Specialization.Engine);
 
-        var clientIds = fixture.Orders
-            .Where(o => o.MechanicId == mechanic.Id)
-            .Select(o => o.ClientId)
-            .Distinct()
-            .ToList();
-
         var actual = fixture.Clients
-            .Where(c => clientIds.Contains(c.Id))
+            .Where(c => fixture.Orders.Any(o => o.ClientId == c.Id && o.MechanicId == mechanic.Id))
             .OrderBy(c => c.FullName)
             .ToList();
 
