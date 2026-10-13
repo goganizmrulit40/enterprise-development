@@ -91,7 +91,8 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetOrderTotalCost()
     {
-        var order = fixture.Orders.First(o => o.Works.Count > 1);
+        var orderId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        var order = fixture.Orders.Single(o => o.Id == orderId);
 
         var total = order.Works.Sum(w => w.Price);
         var car = fixture.Cars.First(c => c.Id == order.CarId);

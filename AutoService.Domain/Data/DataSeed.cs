@@ -305,6 +305,7 @@ public static class DataSeed
         return[
             new()
             {
+                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 CarId = Cars[0].Id,
                 ClientId = Clients[0].Id,
                 MechanicId = Mechanics[0].Id,
