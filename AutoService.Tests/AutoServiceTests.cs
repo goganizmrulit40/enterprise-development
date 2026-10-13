@@ -67,7 +67,7 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetRepeatClientsLastMonth()
     {
-        var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Local).AddDays(-30);
+        var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Utc).AddDays(-30);
 
         var actual = fixture.Orders
             .Where(o => o.AcceptedAt >= monthAgo)
