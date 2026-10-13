@@ -1,4 +1,3 @@
-using AutoService.Domain.Data;
 using AutoService.Domain.Models;
 
 namespace AutoService.Tests;
@@ -6,43 +5,24 @@ namespace AutoService.Tests;
 /// <summary>
 /// Класс, хранящий юнит-тесты
 /// </summary>
-public class AutoServiceTests
+public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper output)
+    : IClassFixture<AutoServiceFixture>
 {
-    private readonly ITestOutputHelper  _output;
-    private readonly List<Client>       _clients;
-    private readonly List<Car>          _cars;
-    private readonly List<Mechanic>     _mechanics;
-    private readonly List<WorkType>     _works;
-    private readonly List<Order>        _orders;
-
-    /// <summary>
-    /// Конструктор класса
-    /// </summary>
-    public AutoServiceTests(ITestOutputHelper output)
-    {
-        _output = output;
-        _clients = DataSeed.Clients;
-        _cars = DataSeed.Cars;
-        _mechanics = DataSeed.Mechanics;
-        _works = DataSeed.Works;
-        _orders = DataSeed.Orders;
-    }
-
     /// <summary>
     /// Тест 1: механики по виду работ
     /// </summary>
     [Fact]
     public void GetMechanicsByWorkCategory()
     {
-        var work = _works.First(w => w.Name == "Диагностика ходовой");
+        var work = fixture.Works.First(w => w.Name == "Диагностика ходовой");
 
-        var result = _mechanics
+        var result = fixture.Mechanics
             .Where(m => m.Specialization.ToString() == work.Category)
             .OrderBy(m => m.FullName)
             .ToList();
 
         foreach (var m in result)
-            _output.WriteLine($"{m.FullName} — {m.Specialization}");
+            output.WriteLine($"{m.FullName} — {m.Specialization}");
 
         Assert.NotEmpty(result);
         Assert.All(result, m => Assert.Equal(work.Category, m.Specialization.ToString()));
@@ -54,22 +34,22 @@ public class AutoServiceTests
     [Fact]
     public void GetClientsByMechanic()
     {
-        var mechanic = _mechanics.First(m => m.Specialization == Specialization.Engine);
+        var mechanic = fixture.Mechanics.First(m => m.Specialization == Specialization.Engine);
 
-        var clientIds = _orders
+        var clientIds = fixture.Orders
             .Where(o => o.MechanicId == mechanic.Id)
             .Select(o => o.ClientId)
             .Distinct()
             .ToList();
 
-        var clients = _clients
+        var clients = fixture.Clients
             .Where(c => clientIds.Contains(c.Id))
             .OrderBy(c => c.FullName)
             .ToList();
 
-        _output.WriteLine($"Механик: {mechanic.FullName}");
+        output.WriteLine($"Механик: {mechanic.FullName}");
         foreach (var c in clients)
-            _output.WriteLine($"{c.FullName} — {c.Phone}");
+            output.WriteLine($"{c.FullName} — {c.Phone}");
 
         Assert.NotEmpty(clients);
 
@@ -85,7 +65,7 @@ public class AutoServiceTests
     {
         var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Local).AddDays(-30);
 
-        var grouped = _orders
+        var grouped = fixture.Orders
             .Where(o => o.AcceptedAt >= monthAgo)
             .GroupBy(o => o.ClientId)
             .Select(g => new { ClientId = g.Key, Count = g.Count() })
@@ -94,8 +74,8 @@ public class AutoServiceTests
 
         foreach (var g in grouped)
         {
-            var client = _clients.First(c => c.Id == g.ClientId);
-            _output.WriteLine($"{client.FullName}: {g.Count} обращения");
+            var client = fixture.Clients.First(c => c.Id == g.ClientId);
+            output.WriteLine($"{client.FullName}: {g.Count} обращения");
         }
 
         Assert.NotEmpty(grouped);
@@ -107,15 +87,15 @@ public class AutoServiceTests
     [Fact]
     public void GetOrderTotalCost()
     {
-        var order = _orders.First(o => o.Works.Count > 1);
+        var order = fixture.Orders.First(o => o.Works.Count > 1);
 
         var total = order.Works.Sum(w => w.Price);
-        var car = _cars.First(c => c.Id == order.CarId);
+        var car = fixture.Cars.First(c => c.Id == order.CarId);
 
-        _output.WriteLine($"Авто: {car.Brand} {car.Model} ({car.LicensePlate})");
+        output.WriteLine($"Авто: {car.Brand} {car.Model} ({car.LicensePlate})");
         foreach (var w in order.Works)
-            _output.WriteLine($"  {w.Name}: {w.Price} р.");
-        _output.WriteLine($"Итого: {total} р.");
+            output.WriteLine($"  {w.Name}: {w.Price} р.");
+        output.WriteLine($"Итого: {total} р.");
 
         Assert.Equal(order.TotalCost, total);
         Assert.True(total > 0);
@@ -127,7 +107,7 @@ public class AutoServiceTests
     [Fact]
     public void GetTop5Works()
     {
-        var top = _orders
+        var top = fixture.Orders
             .SelectMany(o => o.Works)
             .GroupBy(w => w.Name)
             .Select(g => new { Name = g.Key, Count = g.Count() })
@@ -137,7 +117,7 @@ public class AutoServiceTests
             .ToList();
 
         foreach (var t in top)
-            _output.WriteLine($"{t.Name}: {t.Count}");
+            output.WriteLine($"{t.Name}: {t.Count}");
 
         Assert.True(top.Count > 0);
         Assert.True(top.Count <= 5);
