@@ -302,7 +302,8 @@ public static class DataSeed
     {
         var now = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Utc);
 
-        return[
+        return
+        [
             new()
             {
                 Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
