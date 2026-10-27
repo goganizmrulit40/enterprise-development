@@ -152,6 +152,7 @@ public static class DataSeed
     [
         new()
         {
+            Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
             Passport = "8888 123345",
             FullName = "Кириллов Кирилл Кириллович",
             Specialization = Specialization.Engine,

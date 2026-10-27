@@ -47,7 +47,8 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
             "Иванов Иван Иванович"
         };
 
-        var mechanic = fixture.Mechanics.First(m => m.Specialization == Specialization.Engine);
+        var mechanicId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        var mechanic = fixture.Mechanics.Single(m => m.Id == mechanicId);
 
         var actual = fixture.Clients
             .Where(c => fixture.Orders.Any(o => o.ClientId == c.Id && o.MechanicId == mechanic.Id))
