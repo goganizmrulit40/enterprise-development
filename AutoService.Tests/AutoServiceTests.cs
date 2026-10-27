@@ -8,15 +8,15 @@ namespace AutoService.Tests;
 public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper output)
     : IClassFixture<AutoServiceFixture>
 {
-    private const string DiagnosticsWorkName = "Диагностика ходовой";
-
     /// <summary>
     /// Тест 1: механики по виду работ
     /// </summary>
     [Fact]
     public void GetMechanicsByWorkCategory()
     {
-        var work = fixture.Works.First(w => w.Name == DiagnosticsWorkName);
+        const string diagnosticsWorkName = "Диагностика ходовой";
+
+        var work = fixture.Works.First(w => w.Name == diagnosticsWorkName);
 
         var actual  = fixture.Mechanics
             .Where(m => m.Specialization.ToString() == work.Category)
