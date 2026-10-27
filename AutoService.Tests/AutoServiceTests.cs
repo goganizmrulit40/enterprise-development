@@ -16,6 +16,12 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     {
         const string diagnosticsWorkName = "Диагностика ходовой";
 
+        var expected = new[]
+        {
+            "Мошкова Мошка Мошковна",
+            "Родионов Михаил Петрович"
+        };
+
         var work = fixture.Works.First(w => w.Name == diagnosticsWorkName);
 
         var actual  = fixture.Mechanics
@@ -26,12 +32,6 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
         foreach (var m in actual)
             output.WriteLine($"{m.FullName} — {m.Specialization}");
 
-        var expected = new[]
-        {
-            "Мошкова Мошка Мошковна",
-            "Родионов Михаил Петрович"
-        };
-
         Assert.Equal(expected, actual.Select(m => m.FullName).ToList());
     }
 
@@ -41,6 +41,12 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetClientsByMechanic()
     {
+        var expected = new[]
+        {
+            "Андреев Андрей Андреевич",
+            "Иванов Иван Иванович"
+        };
+
         var mechanic = fixture.Mechanics.First(m => m.Specialization == Specialization.Engine);
 
         var actual = fixture.Clients
@@ -51,12 +57,6 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
         output.WriteLine($"Механик: {mechanic.FullName}");
         foreach (var c in actual)
             output.WriteLine($"{c.FullName} — {c.Phone}");
-
-        var expected = new[]
-        {
-            "Андреев Андрей Андреевич",
-            "Иванов Иван Иванович"
-        };
 
         Assert.Equal(expected, actual.Select(c => c.FullName).ToList());
     }
@@ -69,6 +69,8 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     {
         var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Utc).AddDays(-30);
 
+        var expected = new[] { "Иванов Иван Иванович" };
+
         var actual = fixture.Orders
             .Where(o => o.AcceptedAt >= monthAgo)
             .GroupBy(o => o.ClientId)
@@ -80,8 +82,6 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
         foreach (var g in actual)
             output.WriteLine($"{g.Client.FullName}: {g.Count} обращения");
 
-        var expected = new[] { "Иванов Иван Иванович" };
-
         Assert.Equal(expected, actual.Select(x => x.Client.FullName).ToList());
     }
 
@@ -91,18 +91,20 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetOrderTotalCost()
     {
+        var expectedTotal = 9700m;
+
         var orderId = Guid.Parse("11111111-1111-1111-1111-111111111111");
         var order = fixture.Orders.Single(o => o.Id == orderId);
 
-        var total = order.Works.Sum(w => w.Price);
+        var actualTotal = order.Works.Sum(w => w.Price);
         var car = fixture.Cars.First(c => c.Id == order.CarId);
 
         output.WriteLine($"Авто: {car.Brand} {car.Model} ({car.LicensePlate})");
         foreach (var w in order.Works)
             output.WriteLine($"  {w.Name}: {w.Price} р.");
-        output.WriteLine($"Итого: {total} р.");
+        output.WriteLine($"Итого: {actualTotal} р.");
 
-        Assert.Equal(9700m, total);
+        Assert.Equal(expectedTotal, actualTotal);
     }
 
     /// <summary>
@@ -111,6 +113,15 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetTop5Works()
     {
+        var expected = new[]
+        {
+            "Диагностика ходовой",
+            "Замена АКБ",
+            "Замена тормозных дисков",
+            "Компьютерная диагностика",
+            "Правка вмятины крыла"
+        };
+
         var actual = fixture.Orders
             .SelectMany(o => o.Works)
             .GroupBy(w => w.Name)
@@ -122,15 +133,6 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
 
         foreach (var t in actual)
             output.WriteLine($"{t.Name}: {t.Count}");
-
-        var expected = new[]
-        {
-            "Диагностика ходовой",
-            "Замена АКБ",
-            "Замена тормозных дисков",
-            "Компьютерная диагностика",
-            "Правка вмятины крыла"
-        };
 
         Assert.Equal(expected, actual.Select(x => x.Name).ToList());
     }
