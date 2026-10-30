@@ -1,96 +1,53 @@
-# Лабораторная работа №1 - Классы
+# Лабораторная работа №2 - Сервер (REST API)
 
 ## Цель работы
 
-Реализовать объектную модель предметной области "Автосервис", реализовать линк-запросы к тестовым данным, также с помощью модульных тестов на xUnit v3 проверить результаты.
+Реализовать серверное приложение на ASP.NET Core (REST API), предоставляющее базовые CRUD-операции для сущностей автосервиса, а также API для выполнения аналитических запросов из ЛР1. Хранение данных на данном этапе осуществляется в памяти.
 
-## Предметная область
+## Архитектура проекта
 
-В проекте реализованы следующие основные классы:
-- `Client` — клиент автосервиса;
-- `Car` — автомобиль клиента;
-- `Mechanic` — механик автосервиса;
-- `WorkType` — вид работ, выполняемых в автосервисе;
-- `Order` — заказ на обслуживание автомобиля.
+Для соблюдения принципов чистой архитектуры (Clean Architecture) проект разделен на слои:
 
-а также перечисление:
-- `Specialization` — специализация механика.
+- `AutoService.Domain` — доменные модели и интерфейсы репозиториев.
+- `AutoService.Contracts` — DTO (Data Transfer Objects) и интерфейсы сервисов.
+- `AutoService.Application` — бизнес-логика (сервисы, маппинг, аналитика).
+- `AutoService.Infrastructure` — реализация репозиториев (работа с `DataSeed` в памяти).
+- `AutoService.Api` — контроллеры и конфигурация внедрения зависимостей (DI).
 
-Между классами реализованы связи: клиент может иметь несколько
-автомобилей, каждый автомобиль привязан к клиенту. Заказ содержит
-информацию о клиенте, автомобиле, механике и списке видов работ,
-а также даты приёма и выдачи автомобиля. Категории видов работ совпадают по значению со специализациями механиков.
+## Реализованный функционал
 
-## Тестовые данные
+**1. CRUD-операции:**
+Реализованы контроллеры для управления всеми основными сущностями:
+- `CarsController` (автомобили)
+- `ClientsController` (клиенты)
+- `MechanicsController` (механики)
+- `OrdersController` (заказы)
+- `WorksController` (виды работ)
 
-Для выполнения лабораторной работы создан статический класс `DataSeed` со статическими свойствами `Clients`, `Cars`, `Mechanics`, `Works` и `Orders`.
+Для каждой сущности доступны методы `GET`, `POST`, `PUT` и `DELETE`. Взаимодействие происходит через DTO.
 
-В наборе данных предусмотрено по 10 экземпляров основных сущностей:
-клиентов, автомобилей, механиков и видов работ и 12 заказов (повторные обращение за последний месяц).
-
-## LINQ-запросы
-
-В модульных тестах реализованы и проверены следующие запросы:
-
+**2. Аналитические запросы:**
+Логика 5 запросов из первой лабораторной вынесена в `ReportsController` и доступна по HTTP:
 1. Получение механиков, специализирующихся на выбранном виде работ.
-2. Получение клиентов, чьи автомобили обслуживались у указанного
-механика, с сортировкой по ФИО.
+2. Получение клиентов, чьи автомобили обслуживались у указанного механика, с сортировкой по ФИО.
 3. Получение клиентов с повторными обращениями за последний месяц.
 4. Подсчёт суммарной стоимости работ для выбранного заказа.
 5. Получение пяти наиболее частых видов работ.
 
-## Модульное тестирование
+## Тестирование
 
-Для тестирования используется **xUnit v3**.
-
-Всего реализовано 5 тестов.
+Для проверки API добавлены интеграционные тесты (`ApiIntegrationTests`), которые поднимают приложение в памяти с помощью `WebApplicationFactory`. Юнит-тесты на LINQ из ЛР1 сохранены.
 
 С помощью команды
 ```commandline
 dotnet test
 ```
 получим результат выполнения:
-```commandline
+```
 Сводка тестового запуска: Пройден!
-  итог: 5
+  итог: 7
   сбой: 0
-  успешно: 5
+  успешно: 7
   пропущено: 0
-  длительность: 1s 142ms
-```
-
-Команда
-```commandline
-dotnet run --project AutoService.Tests -- -showLiveOutput
-```
-даёт более подробную информацию о тестах:
-```commandline
- AutoService.Tests.AutoServiceTests.GetRepeatClientsLastMonth [OUTPUT] Иванов
- Иван Иванович: 3 обращения
-    AutoService.Tests.AutoServiceTests.GetOrderTotalCost [OUTPUT] Авто: Skoda Oc
-tavia (Т812КМ 78)
-    AutoService.Tests.AutoServiceTests.GetOrderTotalCost [OUTPUT]   Правка вмяти
-ны крыла: 6500 р.
-    AutoService.Tests.AutoServiceTests.GetOrderTotalCost [OUTPUT]   Диагностика
-ходовой: 3200 р.
-    AutoService.Tests.AutoServiceTests.GetOrderTotalCost [OUTPUT] Итого: 9700 р.
-    AutoService.Tests.AutoServiceTests.GetTop5Works [OUTPUT] Диагностика ходовой
-: 3
-    AutoService.Tests.AutoServiceTests.GetTop5Works [OUTPUT] Замена АКБ: 2
-    AutoService.Tests.AutoServiceTests.GetTop5Works [OUTPUT] Замена тормозных ди
-сков: 2
-    AutoService.Tests.AutoServiceTests.GetTop5Works [OUTPUT] Компьютерная диагно
-стика: 2
-    AutoService.Tests.AutoServiceTests.GetTop5Works [OUTPUT] Правка вмятины крыл
-а: 2
-    AutoService.Tests.AutoServiceTests.GetClientsByMechanic [OUTPUT] Механик: Ки
-риллов Кирилл Кириллович
-    AutoService.Tests.AutoServiceTests.GetClientsByMechanic [OUTPUT] Андреев Анд
-рей Андреевич — +71234567899
-    AutoService.Tests.AutoServiceTests.GetClientsByMechanic [OUTPUT] Иванов Иван
- Иванович — +71234567890
-    AutoService.Tests.AutoServiceTests.GetMechanicsByWorkCategory [OUTPUT] Мошко
-ва Мошка Мошковна — Diagnostics
-    AutoService.Tests.AutoServiceTests.GetMechanicsByWorkCategory [OUTPUT] Родио
-нов Михаил Петрович — Diagnostics
+  длительность: 1s 771ms
 ```
