@@ -1,5 +1,5 @@
-using AutoService.Domain.Data;
-using AutoService.Domain.Models;
+using AutoService.Contracts.Dtos;
+using AutoService.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoService.Api.Controllers;
@@ -9,15 +9,16 @@ namespace AutoService.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class CarsController : ControllerBase
+public class CarsController(ICarService carService) : ControllerBase
 {
     /// <summary>
     /// Получить список всех автомобилей.
     /// </summary>
     [HttpGet]
-    public ActionResult<IEnumerable<Car>> GetAll()
+    public async Task<ActionResult<IEnumerable<CarDto>>> GetAll()
     {
-        return Ok(DataSeed.Cars);
+        var cars = await carService.GetAllAsync();
+        return Ok(cars);
     }
 
     /// <summary>
@@ -25,9 +26,9 @@ public class CarsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор автомобиля.</param>
     [HttpGet("{id}")]
-    public ActionResult<Car> GetById(Guid id)
+    public async Task<ActionResult<CarDto>> GetById(Guid id)
     {
-        var car = DataSeed.Cars.FirstOrDefault(c => c.Id == id);
+        var car = await carService.GetByIdAsync(id);
         if (car == null) return NotFound();
         return Ok(car);
     }
@@ -37,10 +38,10 @@ public class CarsController : ControllerBase
     /// </summary>
     /// <param name="newCar">Данные нового автомобиля.</param>
     [HttpPost]
-    public ActionResult<Car> Create([FromBody] Car newCar)
+    public async Task<ActionResult<CarDto>> Create([FromBody] CarDto newCar)
     {
-        DataSeed.Cars.Add(newCar);
-        return CreatedAtAction(nameof(GetById), new { id = newCar.Id }, newCar);
+        var created = await carService.CreateAsync(newCar);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     /// <summary>
@@ -49,17 +50,17 @@ public class CarsController : ControllerBase
     /// <param name="id">Идентификатор автомобиля.</param>
     /// <param name="updatedCar">Новые данные автомобиля.</param>
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] Car updatedCar)
+    public async Task<IActionResult> Update(Guid id, [FromBody] CarDto updatedCar)
     {
-        var car = DataSeed.Cars.FirstOrDefault(c => c.Id == id);
-        if (car == null) return NotFound();
-
-        car.Brand = updatedCar.Brand;
-        car.Model = updatedCar.Model;
-        car.Year = updatedCar.Year;
-        car.LicensePlate = updatedCar.LicensePlate;
-
-        return NoContent();
+        try
+        {
+            await carService.UpdateAsync(id, updatedCar);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -67,12 +68,16 @@ public class CarsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор автомобиля.</param>
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var car = DataSeed.Cars.FirstOrDefault(c => c.Id == id);
-        if (car == null) return NotFound();
-
-        DataSeed.Cars.Remove(car);
-        return NoContent();
+        try
+        {
+            await carService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 }

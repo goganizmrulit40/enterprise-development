@@ -1,5 +1,5 @@
-using AutoService.Domain.Data;
-using AutoService.Domain.Models;
+using AutoService.Contracts.Dtos;
+using AutoService.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoService.Api.Controllers;
@@ -9,15 +9,15 @@ namespace AutoService.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class WorksController : ControllerBase
+public class WorksController(IWorkTypeService workService) : ControllerBase
 {
     /// <summary>
     /// Получить список всех видов работ.
     /// </summary>
     [HttpGet]
-    public ActionResult<IEnumerable<WorkType>> GetAll()
+    public async Task<ActionResult<IEnumerable<WorkTypeDto>>> GetAll()
     {
-        return Ok(DataSeed.Works);
+        return Ok(await workService.GetAllAsync());
     }
 
     /// <summary>
@@ -25,9 +25,9 @@ public class WorksController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор вида работ.</param>
     [HttpGet("{id}")]
-    public ActionResult<WorkType> GetById(Guid id)
+    public async Task<ActionResult<WorkTypeDto>> GetById(Guid id)
     {
-        var work = DataSeed.Works.FirstOrDefault(w => w.Id == id);
+        var work = await workService.GetByIdAsync(id);
         if (work == null) return NotFound();
         return Ok(work);
     }
@@ -37,10 +37,10 @@ public class WorksController : ControllerBase
     /// </summary>
     /// <param name="newWork">Данные нового вида работ.</param>
     [HttpPost]
-    public ActionResult<WorkType> Create([FromBody] WorkType newWork)
+    public async Task<ActionResult<WorkTypeDto>> Create([FromBody] WorkTypeDto newWork)
     {
-        DataSeed.Works.Add(newWork);
-        return CreatedAtAction(nameof(GetById), new { id = newWork.Id }, newWork);
+        var created = await workService.CreateAsync(newWork);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     /// <summary>
@@ -49,17 +49,17 @@ public class WorksController : ControllerBase
     /// <param name="id">Идентификатор вида работ.</param>
     /// <param name="updatedWork">Новые данные вида работ.</param>
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] WorkType updatedWork)
+    public async Task<IActionResult> Update(Guid id, [FromBody] WorkTypeDto updatedWork)
     {
-        var work = DataSeed.Works.FirstOrDefault(w => w.Id == id);
-        if (work == null) return NotFound();
-
-        work.Name = updatedWork.Name;
-        work.Category = updatedWork.Category;
-        work.Price = updatedWork.Price;
-        work.Duration = updatedWork.Duration;
-
-        return NoContent();
+        try
+        {
+            await workService.UpdateAsync(id, updatedWork);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -67,12 +67,16 @@ public class WorksController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор вида работ.</param>
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var work = DataSeed.Works.FirstOrDefault(w => w.Id == id);
-        if (work == null) return NotFound();
-
-        DataSeed.Works.Remove(work);
-        return NoContent();
+        try
+        {
+            await workService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 }

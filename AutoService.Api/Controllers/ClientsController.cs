@@ -1,5 +1,5 @@
-using AutoService.Domain.Data;
-using AutoService.Domain.Models;
+using AutoService.Contracts.Dtos;
+using AutoService.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoService.Api.Controllers;
@@ -9,15 +9,15 @@ namespace AutoService.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class ClientsController : ControllerBase
+public class ClientsController(IClientService clientService) : ControllerBase
 {
     /// <summary>
     /// Получить список всех клиентов.
     /// </summary>
     [HttpGet]
-    public ActionResult<IEnumerable<Client>> GetAll()
+    public async Task<ActionResult<IEnumerable<ClientDto>>> GetAll()
     {
-        return Ok(DataSeed.Clients);
+        return Ok(await clientService.GetAllAsync());
     }
 
     /// <summary>
@@ -25,9 +25,9 @@ public class ClientsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор клиента.</param>
     [HttpGet("{id}")]
-    public ActionResult<Client> GetById(Guid id)
+    public async Task<ActionResult<ClientDto>> GetById(Guid id)
     {
-        var client = DataSeed.Clients.FirstOrDefault(c => c.Id == id);
+        var client = await clientService.GetByIdAsync(id);
         if (client == null) return NotFound();
         return Ok(client);
     }
@@ -37,10 +37,10 @@ public class ClientsController : ControllerBase
     /// </summary>
     /// <param name="newClient">Данные нового клиента.</param>
     [HttpPost]
-    public ActionResult<Client> Create([FromBody] Client newClient)
+    public async Task<ActionResult<ClientDto>> Create([FromBody] ClientDto newClient)
     {
-        DataSeed.Clients.Add(newClient);
-        return CreatedAtAction(nameof(GetById), new { id = newClient.Id }, newClient);
+        var created = await clientService.CreateAsync(newClient);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     /// <summary>
@@ -49,15 +49,17 @@ public class ClientsController : ControllerBase
     /// <param name="id">Идентификатор клиента.</param>
     /// <param name="updatedClient">Новые данные клиента.</param>
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] Client updatedClient)
+    public async Task<IActionResult> Update(Guid id, [FromBody] ClientDto updatedClient)
     {
-        var client = DataSeed.Clients.FirstOrDefault(c => c.Id == id);
-        if (client == null) return NotFound();
-
-        client.FullName = updatedClient.FullName;
-        client.Phone = updatedClient.Phone;
-
-        return NoContent();
+        try
+        {
+            await clientService.UpdateAsync(id, updatedClient);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -65,12 +67,16 @@ public class ClientsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор клиента.</param>
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var client = DataSeed.Clients.FirstOrDefault(c => c.Id == id);
-        if (client == null) return NotFound();
-
-        DataSeed.Clients.Remove(client);
-        return NoContent();
+        try
+        {
+            await clientService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 }

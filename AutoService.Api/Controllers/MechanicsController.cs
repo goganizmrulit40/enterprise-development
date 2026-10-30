@@ -1,5 +1,5 @@
-using AutoService.Domain.Data;
-using AutoService.Domain.Models;
+using AutoService.Contracts.Dtos;
+using AutoService.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoService.Api.Controllers;
@@ -9,15 +9,15 @@ namespace AutoService.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class MechanicsController : ControllerBase
+public class MechanicsController(IMechanicService mechanicService) : ControllerBase
 {
     /// <summary>
     /// Получить список всех механиков.
     /// </summary>
     [HttpGet]
-    public ActionResult<IEnumerable<Mechanic>> GetAll()
+    public async Task<ActionResult<IEnumerable<MechanicDto>>> GetAll()
     {
-        return Ok(DataSeed.Mechanics);
+        return Ok(await mechanicService.GetAllAsync());
     }
 
     /// <summary>
@@ -25,9 +25,9 @@ public class MechanicsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор механика.</param>
     [HttpGet("{id}")]
-    public ActionResult<Mechanic> GetById(Guid id)
+    public async Task<ActionResult<MechanicDto>> GetById(Guid id)
     {
-        var mechanic = DataSeed.Mechanics.FirstOrDefault(m => m.Id == id);
+        var mechanic = await mechanicService.GetByIdAsync(id);
         if (mechanic == null) return NotFound();
         return Ok(mechanic);
     }
@@ -37,10 +37,10 @@ public class MechanicsController : ControllerBase
     /// </summary>
     /// <param name="newMechanic">Данные нового механика.</param>
     [HttpPost]
-    public ActionResult<Mechanic> Create([FromBody] Mechanic newMechanic)
+    public async Task<ActionResult<MechanicDto>> Create([FromBody] MechanicDto newMechanic)
     {
-        DataSeed.Mechanics.Add(newMechanic);
-        return CreatedAtAction(nameof(GetById), new { id = newMechanic.Id }, newMechanic);
+        var created = await mechanicService.CreateAsync(newMechanic);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     /// <summary>
@@ -49,17 +49,17 @@ public class MechanicsController : ControllerBase
     /// <param name="id">Идентификатор механика.</param>
     /// <param name="updatedMechanic">Новые данные механика.</param>
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] Mechanic updatedMechanic)
+    public async Task<IActionResult> Update(Guid id, [FromBody] MechanicDto updatedMechanic)
     {
-        var mechanic = DataSeed.Mechanics.FirstOrDefault(m => m.Id == id);
-        if (mechanic == null) return NotFound();
-
-        mechanic.FullName = updatedMechanic.FullName;
-        mechanic.Passport = updatedMechanic.Passport;
-        mechanic.Specialization = updatedMechanic.Specialization;
-        mechanic.Experience = updatedMechanic.Experience;
-
-        return NoContent();
+        try
+        {
+            await mechanicService.UpdateAsync(id, updatedMechanic);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -67,12 +67,16 @@ public class MechanicsController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор механика.</param>
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var mechanic = DataSeed.Mechanics.FirstOrDefault(m => m.Id == id);
-        if (mechanic == null) return NotFound();
-
-        DataSeed.Mechanics.Remove(mechanic);
-        return NoContent();
+        try
+        {
+            await mechanicService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 }
