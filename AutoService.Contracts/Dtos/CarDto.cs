@@ -5,18 +5,28 @@ namespace AutoService.Contracts.Dtos;
 /// </summary>
 public class CarDto
 {
-    /// <summary>Идентификатор автомобиля.</summary>
+    /// <summary>
+    /// Идентификатор автомобиля.
+    /// </summary>
     public Guid Id { get; set; }
 
-    /// <summary>Государственный номер.</summary>
+    /// <summary>
+    /// Государственный номер.
+    /// </summary>
     public string LicensePlate { get; set; } = string.Empty;
 
-    /// <summary>Марка автомобиля.</summary>
+    /// <summary>
+    /// Марка автомобиля.
+    /// </summary>
     public string Brand { get; set; } = string.Empty;
 
-    /// <summary>Модель автомобиля.</summary>
+    /// <summary>
+    /// Модель автомобиля.
+    /// </summary>
     public string Model { get; set; } = string.Empty;
 
-    /// <summary>Год выпуска.</summary>
+    /// <summary>
+    /// Год выпуска.
+    /// </summary>
     public int Year { get; set; }
 }
