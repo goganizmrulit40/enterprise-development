@@ -9,36 +9,43 @@ namespace AutoService.Infrastructure.InMemory;
 /// </summary>
 public class InMemoryCarRepository : ICarRepository
 {
+    private readonly List<Car> _cars = DataSeed.Cars.ToList();
+
     /// <summary>
     /// Получить список всех автомобилей.
     /// </summary>
-    public Task<IEnumerable<Car>> GetAllAsync() => Task.FromResult(DataSeed.Cars.AsEnumerable());
+    public Task<IEnumerable<Car>> GetAllAsync() => Task.FromResult(_cars.AsEnumerable());
 
     /// <summary>
     /// Получить автомобиль по идентификатору.
     /// </summary>
-    public Task<Car?> GetByIdAsync(Guid id) => Task.FromResult(DataSeed.Cars.FirstOrDefault(c => c.Id == id));
+    public Task<Car?> GetByIdAsync(Guid id) => Task.FromResult(_cars.FirstOrDefault(c => c.Id == id));
 
     /// <summary>
     /// Добавить автомобиль.
     /// </summary>
     public Task AddAsync(Car car)
     {
-        DataSeed.Cars.Add(car);
+        _cars.Add(car);
         return Task.CompletedTask;
     }
 
     /// <summary>
     /// Обновить данные автомобиля.
     /// </summary>
-    public Task UpdateAsync(Car car) => Task.CompletedTask;
+    public Task UpdateAsync(Car car)
+    {
+        var index = _cars.FindIndex(c => c.Id == car.Id);
+        if (index != -1) _cars[index] = car;
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Удалить автомобиль.
     /// </summary>
     public Task DeleteAsync(Car car)
     {
-        DataSeed.Cars.Remove(car);
+        _cars.Remove(car);
         return Task.CompletedTask;
     }
 }

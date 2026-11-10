@@ -9,36 +9,43 @@ namespace AutoService.Infrastructure.InMemory;
 /// </summary>
 public class InMemoryOrderRepository : IOrderRepository
 {
+    private readonly List<Order> _orders = DataSeed.Orders.ToList();
+
     /// <summary>
     /// Получить список всех заказов.
     /// </summary>
-    public Task<IEnumerable<Order>> GetAllAsync() => Task.FromResult(DataSeed.Orders.AsEnumerable());
+    public Task<IEnumerable<Order>> GetAllAsync() => Task.FromResult(_orders.AsEnumerable());
 
     /// <summary>
     /// Получить заказ по идентификатору.
     /// </summary>
-    public Task<Order?> GetByIdAsync(Guid id) => Task.FromResult(DataSeed.Orders.FirstOrDefault(o => o.Id == id));
+    public Task<Order?> GetByIdAsync(Guid id) => Task.FromResult(_orders.FirstOrDefault(o => o.Id == id));
 
     /// <summary>
     /// Добавить заказ.
     /// </summary>
     public Task AddAsync(Order order)
     {
-        DataSeed.Orders.Add(order);
+        _orders.Add(order);
         return Task.CompletedTask;
     }
 
     /// <summary>
     /// Обновить данные заказа.
     /// </summary>
-    public Task UpdateAsync(Order order) => Task.CompletedTask;
+    public Task UpdateAsync(Order order)
+    {
+        var index = _orders.FindIndex(o => o.Id == order.Id);
+        if (index != -1) _orders[index] = order;
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Удалить заказ.
     /// </summary>
     public Task DeleteAsync(Order order)
     {
-        DataSeed.Orders.Remove(order);
+        _orders.Remove(order);
         return Task.CompletedTask;
     }
 }
