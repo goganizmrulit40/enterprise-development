@@ -1,3 +1,5 @@
+using AutoService.Contracts.Dtos;
+
 namespace AutoService.Contracts.Interfaces;
 
 /// <summary>
@@ -5,9 +7,9 @@ namespace AutoService.Contracts.Interfaces;
 /// </summary>
 public interface IAnalyticsService
 {
-    public Task<IEnumerable<object>> GetMechanicsByWorkAsync(string workName);
-    public Task<IEnumerable<object>> GetClientsByMechanicAsync(Guid mechanicId);
-    public Task<IEnumerable<object>> GetRepeatClientsAsync();
+    public Task<IEnumerable<MechanicReportDto>> GetMechanicsByWorkAsync(string workName);
+    public Task<IEnumerable<ClientMechanicReportDto>> GetClientsByMechanicAsync(Guid mechanicId);
+    public Task<IEnumerable<RepeatClientReportDto>> GetRepeatClientsAsync();
     public Task<decimal> GetOrderTotalCostAsync(Guid orderId);
-    public Task<IEnumerable<object>> GetTop5WorksAsync();
+    public Task<IEnumerable<TopWorkReportDto>> GetTop5WorksAsync();
 }
