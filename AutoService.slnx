@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="AutoService.Api/AutoService.Api.csproj" />
+  <Project Path="AutoService.AppHost/AutoService.AppHost.csproj" />
   <Project Path="AutoService.Application/AutoService.Application.csproj" />
   <Project Path="AutoService.Contracts/AutoService.Contracts.csproj" />
   <Project Path="AutoService.Domain/AutoService.Domain.csproj" />
