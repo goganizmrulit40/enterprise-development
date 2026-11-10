@@ -48,10 +48,10 @@ public class ClientService(IClientRepository repository) : IClientService
     /// <summary>
     /// Обновить данные клиента.
     /// </summary>
-    public async Task UpdateAsync(Guid id, ClientDto clientDto)
+    public async Task UpdateAsync(Guid id, ClientUpdateDto clientDto)
     {
         var client = await repository.GetByIdAsync(id);
-        if (client == null) throw new Exception("Клиент не найден");
+        if (client == null) return;
 
         client.FullName = clientDto.FullName;
         client.Phone = clientDto.Phone;

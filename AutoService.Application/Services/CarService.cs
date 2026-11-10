@@ -68,11 +68,10 @@ public class CarService(ICarRepository repository) : ICarService
     /// <summary>
     /// Обновить существующий автомобиль.
     /// </summary>
-    public async Task UpdateAsync(Guid id, CarDto carDto)
+    public async Task UpdateAsync(Guid id, CarUpdateDto carDto)
     {
         var car = await repository.GetByIdAsync(id);
-        if (car == null) throw new Exception("Автомобиль не найден");
-
+        if (car == null) return;
         car.LicensePlate = carDto.LicensePlate;
         car.Brand = carDto.Brand;
         car.Model = carDto.Model;

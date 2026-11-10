@@ -59,10 +59,10 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
     /// <summary>
     /// Обновить данные заказа.
     /// </summary>
-    public async Task UpdateAsync(Guid id, OrderDto orderDto)
+    public async Task UpdateAsync(Guid id, OrderUpdateDto orderDto)
     {
         var order = await repository.GetByIdAsync(id);
-        if (order == null) throw new Exception("Заказ не найден");
+        if (order == null) return;
 
         var works = new List<WorkType>();
         foreach (var workId in orderDto.WorkIds)

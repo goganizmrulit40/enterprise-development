@@ -49,7 +49,7 @@ public class MechanicsController(IMechanicService mechanicService) : ControllerB
     /// <param name="id">Идентификатор механика.</param>
     /// <param name="updatedMechanic">Новые данные механика.</param>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] MechanicDto updatedMechanic)
+    public async Task<IActionResult> Update(Guid id, [FromBody] MechanicUpdateDto updatedMechanic)
     {
         try
         {

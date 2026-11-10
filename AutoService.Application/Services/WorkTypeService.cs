@@ -53,10 +53,10 @@ public class WorkTypeService(IWorkTypeRepository repository) : IWorkTypeService
     /// <summary>
     /// Обновить данные вида работ.
     /// </summary>
-    public async Task UpdateAsync(Guid id, WorkTypeDto workDto)
+    public async Task UpdateAsync(Guid id, WorkTypeUpdateDto workDto)
     {
         var work = await repository.GetByIdAsync(id);
-        if (work == null) throw new Exception("Вид работ не найден");
+        if (work == null) return;
 
         work.Name = workDto.Name;
         work.Category = workDto.Category;

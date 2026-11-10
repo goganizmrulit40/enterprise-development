@@ -49,7 +49,7 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     /// <param name="id">Идентификатор заказа.</param>
     /// <param name="updatedOrder">Новые данные заказа.</param>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] OrderDto updatedOrder)
+    public async Task<IActionResult> Update(Guid id, [FromBody] OrderUpdateDto updatedOrder)
     {
         try
         {

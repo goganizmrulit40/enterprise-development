@@ -49,7 +49,7 @@ public class ClientsController(IClientService clientService) : ControllerBase
     /// <param name="id">Идентификатор клиента.</param>
     /// <param name="updatedClient">Новые данные клиента.</param>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] ClientDto updatedClient)
+    public async Task<IActionResult> Update(Guid id, [FromBody] ClientUpdateDto updatedClient)
     {
         try
         {

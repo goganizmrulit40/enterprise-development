@@ -49,7 +49,7 @@ public class WorksController(IWorkTypeService workService) : ControllerBase
     /// <param name="id">Идентификатор вида работ.</param>
     /// <param name="updatedWork">Новые данные вида работ.</param>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] WorkTypeDto updatedWork)
+    public async Task<IActionResult> Update(Guid id, [FromBody] WorkTypeUpdateDto updatedWork)
     {
         try
         {

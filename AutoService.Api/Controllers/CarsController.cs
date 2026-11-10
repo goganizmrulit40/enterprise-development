@@ -50,7 +50,7 @@ public class CarsController(ICarService carService) : ControllerBase
     /// <param name="id">Идентификатор автомобиля.</param>
     /// <param name="updatedCar">Новые данные автомобиля.</param>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] CarDto updatedCar)
+    public async Task<IActionResult> Update(Guid id, [FromBody] CarUpdateDto updatedCar)
     {
         try
         {
