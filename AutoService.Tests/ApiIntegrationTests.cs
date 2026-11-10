@@ -12,7 +12,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
     /// Тест: проверка получения списка машин через API.
     /// </summary>
     [Fact]
-    public async Task GetAllCars_ReturnsSuccessAndData()
+    public async Task GetAllCars_WhenCalled_ReturnsSuccessAndData()
     {
         var cts = new CancellationTokenSource(_defaultTimeout);
 
@@ -39,7 +39,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
     /// Тест: проверка аналитического запроса (топ-5 работ).
     /// </summary>
     [Fact]
-    public async Task GetTop5Works_ReturnsSuccess()
+    public async Task GetTop5Works_WhenCalled_ReturnsSuccess()
     {
         var cts = new CancellationTokenSource(_defaultTimeout);
 
