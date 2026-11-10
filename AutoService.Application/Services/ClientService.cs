@@ -64,7 +64,7 @@ public class ClientService(IClientRepository repository) : IClientService
     public async Task DeleteAsync(Guid id)
     {
         var client = await repository.GetByIdAsync(id);
-        if (client == null) throw new Exception("Клиент не найден");
+        if (client == null) return;
         await repository.DeleteAsync(client);
     }
 }

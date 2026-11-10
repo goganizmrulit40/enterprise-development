@@ -76,7 +76,7 @@ public class MechanicService(IMechanicRepository repository) : IMechanicService
     public async Task DeleteAsync(Guid id)
     {
         var mechanic = await repository.GetByIdAsync(id);
-        if (mechanic == null) throw new Exception("Механик не найден");
+        if (mechanic == null) return;
         await repository.DeleteAsync(mechanic);
     }
 }

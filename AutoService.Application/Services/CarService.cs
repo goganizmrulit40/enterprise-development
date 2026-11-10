@@ -86,8 +86,7 @@ public class CarService(ICarRepository repository) : ICarService
     public async Task DeleteAsync(Guid id)
     {
         var car = await repository.GetByIdAsync(id);
-        if (car == null) throw new Exception("Автомобиль не найден");
-
+        if (car == null) return;
         await repository.DeleteAsync(car);
     }
 }

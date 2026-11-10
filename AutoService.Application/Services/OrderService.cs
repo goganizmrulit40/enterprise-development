@@ -87,7 +87,7 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
     public async Task DeleteAsync(Guid id)
     {
         var order = await repository.GetByIdAsync(id);
-        if (order == null) throw new Exception("Заказ не найден");
+        if (order == null) return;
         await repository.DeleteAsync(order);
     }
 

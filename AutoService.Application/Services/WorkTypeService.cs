@@ -71,7 +71,7 @@ public class WorkTypeService(IWorkTypeRepository repository) : IWorkTypeService
     public async Task DeleteAsync(Guid id)
     {
         var work = await repository.GetByIdAsync(id);
-        if (work == null) throw new Exception("Вид работ не найден");
+        if (work == null) return;
         await repository.DeleteAsync(work);
     }
 }
