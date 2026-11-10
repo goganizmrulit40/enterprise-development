@@ -1,3 +1,4 @@
+using AutoService.Api.Middlewares;
 using AutoService.Application.Services;
 using AutoService.Contracts.Interfaces;
 using AutoService.Domain.Interfaces;
@@ -30,6 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseRouting();
 app.MapControllers();

@@ -51,15 +51,8 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] OrderUpdateDto updatedOrder)
     {
-        try
-        {
-            await orderService.UpdateAsync(id, updatedOrder);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await orderService.UpdateAsync(id, updatedOrder);
+        return NoContent();
     }
 
     /// <summary>
@@ -69,14 +62,7 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await orderService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await orderService.DeleteAsync(id);
+        return NoContent();
     }
 }

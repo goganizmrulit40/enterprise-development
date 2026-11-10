@@ -51,15 +51,8 @@ public class WorksController(IWorkTypeService workService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] WorkTypeUpdateDto updatedWork)
     {
-        try
-        {
-            await workService.UpdateAsync(id, updatedWork);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await workService.UpdateAsync(id, updatedWork);
+        return NoContent();
     }
 
     /// <summary>
@@ -69,14 +62,7 @@ public class WorksController(IWorkTypeService workService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await workService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await workService.DeleteAsync(id);
+        return NoContent();
     }
 }

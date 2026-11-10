@@ -52,15 +52,8 @@ public class CarsController(ICarService carService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] CarUpdateDto updatedCar)
     {
-        try
-        {
-            await carService.UpdateAsync(id, updatedCar);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await carService.UpdateAsync(id, updatedCar);
+        return NoContent();
     }
 
     /// <summary>
@@ -70,14 +63,7 @@ public class CarsController(ICarService carService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await carService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await carService.DeleteAsync(id);
+        return NoContent();
     }
 }

@@ -51,15 +51,8 @@ public class MechanicsController(IMechanicService mechanicService) : ControllerB
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] MechanicUpdateDto updatedMechanic)
     {
-        try
-        {
-            await mechanicService.UpdateAsync(id, updatedMechanic);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await mechanicService.UpdateAsync(id, updatedMechanic);
+        return NoContent();
     }
 
     /// <summary>
@@ -69,14 +62,7 @@ public class MechanicsController(IMechanicService mechanicService) : ControllerB
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await mechanicService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await mechanicService.DeleteAsync(id);
+        return NoContent();
     }
 }

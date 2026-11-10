@@ -51,15 +51,8 @@ public class ClientsController(IClientService clientService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] ClientUpdateDto updatedClient)
     {
-        try
-        {
-            await clientService.UpdateAsync(id, updatedClient);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await clientService.UpdateAsync(id, updatedClient);
+        return NoContent();
     }
 
     /// <summary>
@@ -69,14 +62,7 @@ public class ClientsController(IClientService clientService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await clientService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        await clientService.DeleteAsync(id);
+        return NoContent();
     }
 }
