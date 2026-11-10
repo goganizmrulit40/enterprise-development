@@ -22,7 +22,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
         await using var app = await appHost.BuildAsync(cts.Token);
         await app.StartAsync(cts.Token);
 
-        var httpClient = app.CreateHttpClient("autoservice-api", "https");
+        var httpClient = app.CreateHttpClient("autoservice-api", "http");
 
         output.WriteLine("Отправка запроса к API...");
         var response = await httpClient.GetAsync("/api/cars", cts.Token);
@@ -49,7 +49,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
         await using var app = await appHost.BuildAsync(cts.Token);
         await app.StartAsync(cts.Token);
 
-        var httpClient = app.CreateHttpClient("autoservice-api", "https");
+        var httpClient = app.CreateHttpClient("autoservice-api", "http");
 
         output.WriteLine("Отправка запроса к Reports API...");
         var response = await httpClient.GetAsync("/api/reports/top-5-works", cts.Token);
