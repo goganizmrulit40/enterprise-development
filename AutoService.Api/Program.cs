@@ -2,7 +2,9 @@ using AutoService.Api.Middlewares;
 using AutoService.Application.Services;
 using AutoService.Contracts.Interfaces;
 using AutoService.Domain.Interfaces;
-using AutoService.Infrastructure.InMemory;
+using AutoService.Infrastructure.Persistence;
+using AutoService.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +16,16 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddSingleton<ICarRepository, InMemoryCarRepository>();
-builder.Services.AddSingleton<IClientRepository, InMemoryClientRepository>();
-builder.Services.AddSingleton<IMechanicRepository, InMemoryMechanicRepository>();
-builder.Services.AddSingleton<IOrderRepository, InMemoryOrderRepository>();
-builder.Services.AddSingleton<IWorkTypeRepository, InMemoryWorkTypeRepository>();
+var connectionString = builder.Configuration.GetConnectionString("autoservice-db")
+    ?? "Host=localhost;Port=5432;Database=autoservice;Username=postgres;Password=postgres";
+
+builder.Services.AddDbContext<AutoServiceDbContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<ICarRepository, EfCarRepository>();
+builder.Services.AddScoped<IClientRepository, EfClientRepository>();
+builder.Services.AddScoped<IMechanicRepository, EfMechanicRepository>();
+builder.Services.AddScoped<IOrderRepository, EfOrderRepository>();
+builder.Services.AddScoped<IWorkTypeRepository, EfWorkTypeRepository>();
 
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -40,6 +47,24 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseRouting();
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AutoServiceDbContext>();
+    var retries = 0;
+    while (true)
+    {
+        try
+        {
+            await dbContext.Database.MigrateAsync();
+            break;
+        }
+        catch (Exception) when (++retries < 15)
+        {
+            await Task.Delay(1000);
+        }
+    }
+}
 
 app.Run();
 
