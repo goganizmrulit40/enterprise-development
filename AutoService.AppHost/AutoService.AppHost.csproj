@@ -1,6 +1,7 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.6.4">
+<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.6.5" />
     <ProjectReference Include="..\AutoService.Api\AutoService.Api.csproj" />
   </ItemGroup>
 
