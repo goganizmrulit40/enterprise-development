@@ -24,7 +24,7 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
 
         var work = fixture.Works.First(w => w.Name == diagnosticsWorkName);
 
-        var actual  = fixture.Mechanics
+        var actual = fixture.Mechanics
             .Where(m => m.Specialization.ToString() == work.Category)
             .OrderBy(m => m.FullName)
             .ToList();
@@ -68,9 +68,9 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetRepeatClientsLastMonth()
     {
-        var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Utc).AddDays(-30);
-
         var expected = new[] { "Иванов Иван Иванович" };
+
+        var monthAgo = new DateTime(2026, 10, 12, 23, 5, 10, DateTimeKind.Utc).AddDays(-30);
 
         var actual = fixture.Orders
             .Where(o => o.AcceptedAt >= monthAgo)
@@ -92,7 +92,7 @@ public class AutoServiceTests(AutoServiceFixture fixture, ITestOutputHelper outp
     [Fact]
     public void GetOrderTotalCost()
     {
-        var expectedTotal = 9700m;
+        const decimal expectedTotal = 9700m;
 
         var orderId = Guid.Parse("11111111-1111-1111-1111-111111111111");
         var order = fixture.Orders.Single(o => o.Id == orderId);
