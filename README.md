@@ -90,4 +90,4 @@ dotnet test
 2. Запустить оркестратор Aspire (требуется установленный Docker): `dotnet run --project AutoService.AppHost`
 3. Открыть в браузере документацию Swagger по адресу: `http://localhost:5199/swagger`.
 
-Запуск также осуществляется через IDE: необходимо запустить проект AutoService.Api, и браузер со страницей Swagger UI откроется автоматически.
+Запуск также осуществляется через IDE: необходимо запустить проект AutoService.AppHost, и браузер со страницей Swagger UI откроется автоматически.
