@@ -24,4 +24,9 @@ public class CarUpdateDto
     /// Год выпуска.
     /// </summary>
     public int Year { get; set; }
+
+    /// <summary>
+    /// Идентификатор владельца автомобиля.
+    /// </summary>
+    public Guid ClientId { get; set; }
 }
