@@ -8,7 +8,12 @@ namespace AutoService.Application.Services;
 /// <summary>
 /// Сервис для управления заказами.
 /// </summary>
-public class OrderService(IOrderRepository repository, IWorkTypeRepository workRepository) : IOrderService
+public class OrderService(
+    IOrderRepository repository,
+    IWorkTypeRepository workRepository,
+    ICarRepository carRepository,
+    IClientRepository clientRepository,
+    IMechanicRepository mechanicRepository) : IOrderService
 {
     /// <summary>
     /// Получить список всех заказов.
@@ -33,6 +38,13 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
     /// </summary>
     public async Task<OrderDto> CreateAsync(OrderDto orderDto)
     {
+        var car = await carRepository.GetByIdAsync(orderDto.CarId)
+            ?? throw new Exception($"Автомобиль с идентификатором {orderDto.CarId} не найден");
+        var client = await clientRepository.GetByIdAsync(orderDto.ClientId)
+            ?? throw new Exception($"Клиент с идентификатором {orderDto.ClientId} не найден");
+        var mechanic = await mechanicRepository.GetByIdAsync(orderDto.MechanicId)
+            ?? throw new Exception($"Механик с идентификатором {orderDto.MechanicId} не найден");
+
         var works = new List<WorkType>();
         foreach (var workId in orderDto.WorkIds)
         {
@@ -43,9 +55,12 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
         var order = new Order
         {
             Id = Guid.NewGuid(),
-            CarId = orderDto.CarId,
-            ClientId = orderDto.ClientId,
-            MechanicId = orderDto.MechanicId,
+            CarId = car.Id,
+            Car = car,
+            ClientId = client.Id,
+            Client = client,
+            MechanicId = mechanic.Id,
+            Mechanic = mechanic,
             Works = works,
             AcceptedAt = orderDto.AcceptedAt,
             IssuedAt = orderDto.IssuedAt
@@ -64,6 +79,13 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
         var order = await repository.GetByIdAsync(id);
         if (order == null) return;
 
+        var car = await carRepository.GetByIdAsync(orderDto.CarId)
+            ?? throw new Exception($"Автомобиль с идентификатором {orderDto.CarId} не найден");
+        var client = await clientRepository.GetByIdAsync(orderDto.ClientId)
+            ?? throw new Exception($"Клиент с идентификатором {orderDto.ClientId} не найден");
+        var mechanic = await mechanicRepository.GetByIdAsync(orderDto.MechanicId)
+            ?? throw new Exception($"Механик с идентификатором {orderDto.MechanicId} не найден");
+
         var works = new List<WorkType>();
         foreach (var workId in orderDto.WorkIds)
         {
@@ -71,9 +93,12 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
             if (work != null) works.Add(work);
         }
 
-        order.CarId = orderDto.CarId;
-        order.ClientId = orderDto.ClientId;
-        order.MechanicId = orderDto.MechanicId;
+        order.CarId = car.Id;
+        order.Car = car;
+        order.ClientId = client.Id;
+        order.Client = client;
+        order.MechanicId = mechanic.Id;
+        order.Mechanic = mechanic;
         order.Works = works;
         order.AcceptedAt = orderDto.AcceptedAt;
         order.IssuedAt = orderDto.IssuedAt;
