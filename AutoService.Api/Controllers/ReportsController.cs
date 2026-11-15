@@ -1,3 +1,4 @@
+using AutoService.Contracts.Dtos;
 using AutoService.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,17 +16,9 @@ public class ReportsController(IAnalyticsService analyticsService) : ControllerB
     /// </summary>
     /// <param name="workName">Название работы (например, "Диагностика ходовой").</param>
     [HttpGet("mechanics-by-work")]
-    public async Task<IActionResult> GetMechanicsByWork([FromQuery] string workName)
+    public async Task<ActionResult<IEnumerable<MechanicReportDto>>> GetMechanicsByWork([FromQuery] string workName)
     {
-        try
-        {
-            var result = await analyticsService.GetMechanicsByWorkAsync(workName);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
+        return Ok(await analyticsService.GetMechanicsByWorkAsync(workName));
     }
 
     /// <summary>
@@ -33,27 +26,18 @@ public class ReportsController(IAnalyticsService analyticsService) : ControllerB
     /// </summary>
     /// <param name="mechanicId">Идентификатор механика.</param>
     [HttpGet("clients-by-mechanic/{mechanicId}")]
-    public async Task<IActionResult> GetClientsByMechanic(Guid mechanicId)
+    public async Task<ActionResult<IEnumerable<ClientMechanicReportDto>>> GetClientsByMechanic(Guid mechanicId)
     {
-        try
-        {
-            var result = await analyticsService.GetClientsByMechanicAsync(mechanicId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
+        return Ok(await analyticsService.GetClientsByMechanicAsync(mechanicId));
     }
 
     /// <summary>
     /// 3. Получить клиентов с повторными обращениями за последний месяц.
     /// </summary>
     [HttpGet("repeat-clients")]
-    public async Task<IActionResult> GetRepeatClients()
+    public async Task<ActionResult<IEnumerable<RepeatClientReportDto>>> GetRepeatClients()
     {
-        var result = await analyticsService.GetRepeatClientsAsync();
-        return Ok(result);
+        return Ok(await analyticsService.GetRepeatClientsAsync());
     }
 
     /// <summary>
@@ -61,26 +45,22 @@ public class ReportsController(IAnalyticsService analyticsService) : ControllerB
     /// </summary>
     /// <param name="orderId">Идентификатор заказа.</param>
     [HttpGet("order-total/{orderId}")]
-    public async Task<IActionResult> GetOrderTotalCost(Guid orderId)
+    public async Task<ActionResult<OrderTotalReportDto>> GetOrderTotalCost(Guid orderId)
     {
-        try
+        var total = await analyticsService.GetOrderTotalCostAsync(orderId);
+        return Ok(new OrderTotalReportDto
         {
-            var total = await analyticsService.GetOrderTotalCostAsync(orderId);
-            return Ok(new { OrderId = orderId, TotalCost = total });
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
+            OrderId = orderId,
+            TotalCost = total
+        });
     }
 
     /// <summary>
     /// 5. Получить топ 5 наиболее частых видов работ.
     /// </summary>
     [HttpGet("top-5-works")]
-    public async Task<IActionResult> GetTop5Works()
+    public async Task<ActionResult<IEnumerable<TopWorkReportDto>>> GetTop5Works()
     {
-        var result = await analyticsService.GetTop5WorksAsync();
-        return Ok(result);
+        return Ok(await analyticsService.GetTop5WorksAsync());
     }
 }
