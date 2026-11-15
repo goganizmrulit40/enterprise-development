@@ -3,152 +3,187 @@ using AutoService.Domain.Models;
 namespace AutoService.Domain.Data;
 
 /// <summary>
-/// Тестовые данные для юнит-тестов
+/// Тестовые данные для юнит-тестов и начального заполнения базы данных
 /// </summary>
 public static class DataSeed
 {
     /// <summary>
+    /// Детерминированные идентификаторы, чтобы начальное заполнение базы данных было воспроизводимым
+    /// </summary>
+    private static Guid FixedId(int n) => new(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)n);
+
+    /// <summary>
     /// Возвращаем по 10 экземпляров каждого класса
     /// </summary>
-    public static List<Client> Clients { get; set; } =
+    public static List<Client> Clients { get; } =
     [
         new()
         {
+            Id = FixedId(1),
             FullName = "Иванов Иван Иванович",
             Phone = "+71234567890"
         },
         new()
         {
+            Id = FixedId(2),
             FullName = "Симонов Илья Геогриевич",
             Phone = "+71234567891"
         },
         new()
         {
+            Id = FixedId(3),
             FullName = "Кораблев Гриша Александрович",
             Phone = "+71234567892"
         },
         new()
         {
+            Id = FixedId(4),
             FullName = "Толстой Илья Сергеевич",
             Phone = "+71234567893"
         },
         new()
         {
+            Id = FixedId(5),
             FullName = "Кольцова Александра Тимофеевна",
             Phone = "+71234567894"
         },
         new()
         {
+            Id = FixedId(6),
             FullName = "Кулова Диана Сергеевна",
             Phone = "+71234567895"
         },
         new()
         {
+            Id = FixedId(7),
             FullName = "Кикиморов Петр Иванович",
             Phone = "+71234567896"
         },
         new()
         {
+            Id = FixedId(8),
             FullName = "Кощеев Кощей Кощеевич",
             Phone = "+71234567897"
         },
         new()
         {
+            Id = FixedId(9),
             FullName = "Кефирова Яга Сергеевна",
             Phone = "+71234567898"
         },
         new()
         {
+            Id = FixedId(10),
             FullName = "Андреев Андрей Андреевич",
             Phone = "+71234567899"
         }
     ];
 
-    public static List<Car> Cars { get; set; } =
+    public static List<Car> Cars { get; } =
     [
         new()
         {
+            Id = FixedId(11),
             LicensePlate = "Т812КМ 78",
             Brand = "Skoda",
             Model = "Octavia",
             Year = 2000,
-            ClientId = Clients[0].Id
+            ClientId = Clients[0].Id,
+            Client = Clients[0]
         },
         new()
         {
+            Id = FixedId(12),
             LicensePlate = "Н217УВ 47",
             Brand = "Kia",
             Model = "Rio",
             Year = 2001,
-            ClientId = Clients[1].Id
+            ClientId = Clients[1].Id,
+            Client = Clients[1]
         },
         new()
         {
+            Id = FixedId(13),
             LicensePlate = "М903АС 99",
             Brand = "Lada",
             Model = "Vesta",
             Year = 2002,
-            ClientId = Clients[2].Id
+            ClientId = Clients[2].Id,
+            Client = Clients[2]
         },
         new()
         {
+            Id = FixedId(14),
             LicensePlate = "Е441РТ 67",
             Brand = "Hyundai",
             Model = "Creta",
             Year = 2003,
-            ClientId = Clients[3].Id
+            ClientId = Clients[3].Id,
+            Client = Clients[3]
         },
         new()
         {
+            Id = FixedId(15),
             LicensePlate = "В562НХ 52",
             Brand = "Mazda",
             Model = "CX-5",
             Year = 2004,
-            ClientId = Clients[4].Id
+            ClientId = Clients[4].Id,
+            Client = Clients[4]
         },
         new()
         {
+            Id = FixedId(16),
             LicensePlate = "К119МУ 178",
             Brand = "Chery",
             Model = "Tiggo 7",
             Year = 2005,
-            ClientId = Clients[5].Id
+            ClientId = Clients[5].Id,
+            Client = Clients[5]
         },
         new()
         {
+            Id = FixedId(17),
             LicensePlate = "О774ВС 23",
             Brand = "Toyota",
             Model = "Camry",
             Year = 2006,
-            ClientId = Clients[6].Id
+            ClientId = Clients[6].Id,
+            Client = Clients[6]
         },
         new()
         {
+            Id = FixedId(18),
             LicensePlate = "С528ТЕ 64",
             Brand = "Renault",
             Model = "Duster",
             Year = 2007,
-            ClientId = Clients[7].Id
+            ClientId = Clients[7].Id,
+            Client = Clients[7]
         },
         new()
         {
+            Id = FixedId(19),
             LicensePlate = "У391АК 16",
             Brand = "VW",
             Model = "Polo",
             Year = 2008,
-            ClientId = Clients[8].Id
+            ClientId = Clients[8].Id,
+            Client = Clients[8]
         },
         new()
         {
+            Id = FixedId(20),
             LicensePlate = "Р527ОМ 34",
             Brand = "Nissan",
             Model = "Qashqai",
             Year = 2026,
-            ClientId = Clients[9].Id
+            ClientId = Clients[9].Id,
+            Client = Clients[9]
         }
     ];
 
-    public static List<Mechanic> Mechanics { get; set; } =
+    public static List<Mechanic> Mechanics { get; } =
     [
         new()
         {
@@ -160,6 +195,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(22),
             Passport = "7777 123243",
             FullName = "Романова Ольга Владимировна",
             Specialization = Specialization.Transmission,
@@ -167,6 +203,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(23),
             Passport = "6666 213123",
             FullName = "Гусеев Гусь Гусевич",
             Specialization = Specialization.Electrical,
@@ -174,6 +211,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(24),
             Passport = "5555 324255",
             FullName = "Комаров Комар Комарович",
             Specialization = Specialization.Body,
@@ -181,6 +219,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(25),
             Passport = "4444 543546",
             FullName = "Мошкова Мошка Мошковна",
             Specialization = Specialization.Diagnostics,
@@ -188,6 +227,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(26),
             Passport = "3333 456546",
             FullName = "Тараканов Таракан Тараканович",
             Specialization = Specialization.Suspension,
@@ -195,6 +235,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(27),
             Passport = "2222 879789",
             FullName = "Тараканов Торт Тортович",
             Specialization = Specialization.Brakes,
@@ -202,6 +243,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(28),
             Passport = "1111 674667",
             FullName = "Горева Зима Владимировна",
             Specialization = Specialization.Painting,
@@ -209,6 +251,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(29),
             Passport = "9999 812812",
             FullName = "Веснова Весна Владимировна",
             Specialization = Specialization.Engine,
@@ -216,6 +259,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(30),
             Passport = "0000 524267",
             FullName = "Родионов Михаил Петрович",
             Specialization = Specialization.Diagnostics,
@@ -223,10 +267,11 @@ public static class DataSeed
         }
     ];
 
-    public static List<WorkType> Works { get; set; } =
+    public static List<WorkType> Works { get; } =
     [
         new()
         {
+            Id = FixedId(41),
             Name = "Правка вмятины крыла",
             Category = "Body",
             Price = 6500,
@@ -234,6 +279,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(42),
             Name = "Диагностика ходовой",
             Category = "Diagnostics",
             Price = 3200,
@@ -241,6 +287,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(43),
             Name = "Замена тормозных дисков",
             Category = "Brakes",
             Price = 8900,
@@ -248,6 +295,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(44),
             Name = "Ремонт ГБЦ",
             Category = "Engine",
             Price = 42000,
@@ -255,6 +303,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(45),
             Name = "Замена ремня ГРМ",
             Category = "Engine",
             Price = 18500,
@@ -262,6 +311,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(46),
             Name = "Компьютерная диагностика",
             Category = "Diagnostics",
             Price = 2400,
@@ -269,6 +319,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(47),
             Name = "Замена АКБ",
             Category = "Electrical",
             Price = 1500,
@@ -276,6 +327,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(48),
             Name = "Покраска бампера",
             Category = "Painting",
             Price = 16000,
@@ -283,6 +335,7 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(49),
             Name = "Замена амортизаторов",
             Category = "Suspension",
             Price = 9500,
@@ -290,10 +343,24 @@ public static class DataSeed
         },
         new()
         {
+            Id = FixedId(50),
             Name = "Ремонт МКПП",
             Category = "Transmission",
             Price = 35000,
             Duration = TimeSpan.FromHours(10)
+        }
+    ];
+
+    /// <summary>
+    /// Начальный пользователь для входа в API
+    /// </summary>
+    public static List<User> Users { get; } =
+    [
+        new()
+        {
+            Id = FixedId(81),
+            Username = "admin",
+            PasswordHash = "AQAAAAIAAYagAAAAEAABAgMEBQYHCAkKCwwNDg97z2IZyhqC3YaJEn8frGtw7fMb52Ky5VJvyBDCaUXU9w=="
         }
     ];
 
@@ -309,8 +376,11 @@ public static class DataSeed
             {
                 Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 CarId = Cars[0].Id,
+                Car = Cars[0],
                 ClientId = Clients[0].Id,
+                Client = Clients[0],
                 MechanicId = Mechanics[0].Id,
+                Mechanic = Mechanics[0],
                 Works =
                 [
                     Works[0],
@@ -321,9 +391,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(62),
                 CarId = Cars[1].Id,
+                Car = Cars[1],
                 ClientId = Clients[1].Id,
+                Client = Clients[1],
                 MechanicId = Mechanics[2].Id,
+                Mechanic = Mechanics[2],
                 Works =
                 [
                     Works[6]
@@ -333,9 +407,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(63),
                 CarId = Cars[2].Id,
+                Car = Cars[2],
                 ClientId = Clients[2].Id,
+                Client = Clients[2],
                 MechanicId = Mechanics[5].Id,
+                Mechanic = Mechanics[5],
                 Works =
                 [
                     Works[2]
@@ -345,9 +423,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(64),
                 CarId = Cars[3].Id,
+                Car = Cars[3],
                 ClientId = Clients[3].Id,
+                Client = Clients[3],
                 MechanicId = Mechanics[4].Id,
+                Mechanic = Mechanics[4],
                 Works =
                 [
                     Works[5]
@@ -357,9 +439,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(65),
                 CarId = Cars[4].Id,
+                Car = Cars[4],
                 ClientId = Clients[4].Id,
+                Client = Clients[4],
                 MechanicId = Mechanics[1].Id,
+                Mechanic = Mechanics[1],
                 Works =
                 [
                     Works[9]
@@ -369,9 +455,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(66),
                 CarId = Cars[5].Id,
+                Car = Cars[5],
                 ClientId = Clients[5].Id,
+                Client = Clients[5],
                 MechanicId = Mechanics[3].Id,
+                Mechanic = Mechanics[3],
                 Works =
                 [
                     Works[7]
@@ -381,9 +471,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(67),
                 CarId = Cars[6].Id,
+                Car = Cars[6],
                 ClientId = Clients[6].Id,
+                Client = Clients[6],
                 MechanicId = Mechanics[8].Id,
+                Mechanic = Mechanics[8],
                 Works =
                 [
                     Works[3]
@@ -393,9 +487,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(68),
                 CarId = Cars[7].Id,
+                Car = Cars[7],
                 ClientId = Clients[7].Id,
+                Client = Clients[7],
                 MechanicId = Mechanics[6].Id,
+                Mechanic = Mechanics[6],
                 Works =
                 [
                     Works[2],
@@ -406,9 +504,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(69),
                 CarId = Cars[8].Id,
+                Car = Cars[8],
                 ClientId = Clients[8].Id,
+                Client = Clients[8],
                 MechanicId = Mechanics[9].Id,
+                Mechanic = Mechanics[9],
                 Works =
                 [
                     Works[1],
@@ -419,9 +521,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(70),
                 CarId = Cars[9].Id,
+                Car = Cars[9],
                 ClientId = Clients[9].Id,
+                Client = Clients[9],
                 MechanicId = Mechanics[0].Id,
+                Mechanic = Mechanics[0],
                 Works =
                 [
                     Works[4]
@@ -431,9 +537,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(71),
                 CarId = Cars[0].Id,
+                Car = Cars[0],
                 ClientId = Clients[0].Id,
+                Client = Clients[0],
                 MechanicId = Mechanics[0].Id,
+                Mechanic = Mechanics[0],
                 Works =
                 [
                     Works[0]
@@ -443,9 +553,13 @@ public static class DataSeed
             },
             new()
             {
+                Id = FixedId(72),
                 CarId = Cars[0].Id,
+                Car = Cars[0],
                 ClientId = Clients[0].Id,
+                Client = Clients[0],
                 MechanicId = Mechanics[4].Id,
+                Mechanic = Mechanics[4],
                 Works =
                 [
                     Works[1]

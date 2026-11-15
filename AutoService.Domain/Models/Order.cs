@@ -16,14 +16,29 @@ public class Order
     public Guid CarId { get; set; }
 
     /// <summary>
+    /// Автомобиль, который обслуживается по заказу
+    /// </summary>
+    public required Car Car { get; set; }
+
+    /// <summary>
     /// Ссылка на клиента
     /// </summary>
     public Guid ClientId { get; set; }
 
     /// <summary>
+    /// Клиент, оформивший заказ
+    /// </summary>
+    public required Client Client { get; set; }
+
+    /// <summary>
     /// Ссылка на механика
     /// </summary>
     public Guid MechanicId { get; set; }
+
+    /// <summary>
+    /// Механик, назначенный на заказ
+    /// </summary>
+    public required Mechanic Mechanic { get; set; }
 
     /// <summary>
     /// Список видов работ

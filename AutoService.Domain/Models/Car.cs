@@ -34,4 +34,9 @@ public class Car
     /// Идентификатор клиента, которому принадлежит авто
     /// </summary>
     public Guid ClientId { get; set; }
+
+    /// <summary>
+    /// Клиент, которому принадлежит авто
+    /// </summary>
+    public required Client Client { get; set; }
 }
