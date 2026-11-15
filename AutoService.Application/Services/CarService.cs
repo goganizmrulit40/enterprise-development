@@ -8,7 +8,7 @@ namespace AutoService.Application.Services;
 /// <summary>
 /// Сервис для управления автомобилями.
 /// </summary>
-public class CarService(ICarRepository repository) : ICarService
+public class CarService(ICarRepository repository, IClientRepository clientRepository) : ICarService
 {
     /// <summary>
     /// Получить список всех автомобилей.
@@ -23,7 +23,8 @@ public class CarService(ICarRepository repository) : ICarService
             LicensePlate = c.LicensePlate,
             Brand = c.Brand,
             Model = c.Model,
-            Year = c.Year
+            Year = c.Year,
+            ClientId = c.ClientId
         });
     }
 
@@ -41,7 +42,8 @@ public class CarService(ICarRepository repository) : ICarService
             LicensePlate = car.LicensePlate,
             Brand = car.Brand,
             Model = car.Model,
-            Year = car.Year
+            Year = car.Year,
+            ClientId = car.ClientId
         };
     }
 
@@ -50,13 +52,18 @@ public class CarService(ICarRepository repository) : ICarService
     /// </summary>
     public async Task<CarDto> CreateAsync(CarDto carDto)
     {
+        var client = await clientRepository.GetByIdAsync(carDto.ClientId)
+            ?? throw new Exception($"Клиент с идентификатором {carDto.ClientId} не найден");
+
         var car = new Car
         {
             Id = Guid.NewGuid(),
             LicensePlate = carDto.LicensePlate,
             Brand = carDto.Brand,
             Model = carDto.Model,
-            Year = carDto.Year
+            Year = carDto.Year,
+            ClientId = client.Id,
+            Client = client
         };
 
         await repository.AddAsync(car);
@@ -72,10 +79,16 @@ public class CarService(ICarRepository repository) : ICarService
     {
         var car = await repository.GetByIdAsync(id);
         if (car == null) return;
+
+        var client = await clientRepository.GetByIdAsync(carDto.ClientId)
+            ?? throw new Exception($"Клиент с идентификатором {carDto.ClientId} не найден");
+
         car.LicensePlate = carDto.LicensePlate;
         car.Brand = carDto.Brand;
         car.Model = carDto.Model;
         car.Year = carDto.Year;
+        car.ClientId = client.Id;
+        car.Client = client;
 
         await repository.UpdateAsync(car);
     }
