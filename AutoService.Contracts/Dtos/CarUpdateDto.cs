@@ -8,17 +8,17 @@ public class CarUpdateDto
     /// <summary>
     /// Государственный номер.
     /// </summary>
-    public string LicensePlate { get; set; } = string.Empty;
+    public required string LicensePlate { get; set; }
 
     /// <summary>
     /// Марка автомобиля.
     /// </summary>
-    public string Brand { get; set; } = string.Empty;
+    public required string Brand { get; set; }
 
     /// <summary>
     /// Модель автомобиля.
     /// </summary>
-    public string Model { get; set; } = string.Empty;
+    public required string Model { get; set; }
 
     /// <summary>
     /// Год выпуска.
