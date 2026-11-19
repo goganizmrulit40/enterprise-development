@@ -77,8 +77,8 @@ public class CarService(ICarRepository repository, IClientRepository clientRepos
     /// </summary>
     public async Task UpdateAsync(Guid id, CarUpdateDto carDto)
     {
-        var car = await repository.GetByIdAsync(id);
-        if (car == null) return;
+        var car = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Автомобиль с id {id} не найден");
 
         var client = await clientRepository.GetByIdAsync(carDto.ClientId)
             ?? throw new Exception($"Клиент с идентификатором {carDto.ClientId} не найден");

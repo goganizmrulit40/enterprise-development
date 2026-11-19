@@ -15,6 +15,11 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             await next(context);
         }
+        catch (KeyNotFoundException ex)
+        {
+            logger.LogWarning(ex, "Запрашиваемый ресурс не найден: {Message}", ex.Message);
+            await WriteErrorAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
         catch (DbUpdateException ex)
         {
             logger.LogWarning(ex, "Изменение данных нарушает ограничения базы данных");

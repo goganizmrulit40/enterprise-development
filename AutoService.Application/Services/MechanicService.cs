@@ -60,8 +60,8 @@ public class MechanicService(IMechanicRepository repository) : IMechanicService
     /// </summary>
     public async Task UpdateAsync(Guid id, MechanicUpdateDto mechanicDto)
     {
-        var mechanic = await repository.GetByIdAsync(id);
-        if (mechanic == null) return;
+        var mechanic = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Механик с id {id} не найден");
 
         mechanic.FullName = mechanicDto.FullName;
         mechanic.Passport = mechanicDto.Passport;

@@ -55,8 +55,8 @@ public class WorkTypeService(IWorkTypeRepository repository) : IWorkTypeService
     /// </summary>
     public async Task UpdateAsync(Guid id, WorkTypeUpdateDto workDto)
     {
-        var work = await repository.GetByIdAsync(id);
-        if (work == null) return;
+        var work = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Вид работ с id {id} не найден");
 
         work.Name = workDto.Name;
         work.Category = workDto.Category;

@@ -76,8 +76,8 @@ public class OrderService(
     /// </summary>
     public async Task UpdateAsync(Guid id, OrderUpdateDto orderDto)
     {
-        var order = await repository.GetByIdAsync(id);
-        if (order == null) return;
+        var order = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Заказ с id {id} не найден");
 
         var car = await carRepository.GetByIdAsync(orderDto.CarId)
             ?? throw new Exception($"Автомобиль с идентификатором {orderDto.CarId} не найден");
