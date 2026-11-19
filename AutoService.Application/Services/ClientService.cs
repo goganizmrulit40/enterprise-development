@@ -50,8 +50,8 @@ public class ClientService(IClientRepository repository) : IClientService
     /// </summary>
     public async Task UpdateAsync(Guid id, ClientUpdateDto clientDto)
     {
-        var client = await repository.GetByIdAsync(id);
-        if (client == null) return;
+        var client = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Клиент с id {id} не найден");
 
         client.FullName = clientDto.FullName;
         client.Phone = clientDto.Phone;

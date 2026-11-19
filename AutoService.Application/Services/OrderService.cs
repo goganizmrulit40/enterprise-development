@@ -61,8 +61,8 @@ public class OrderService(IOrderRepository repository, IWorkTypeRepository workR
     /// </summary>
     public async Task UpdateAsync(Guid id, OrderUpdateDto orderDto)
     {
-        var order = await repository.GetByIdAsync(id);
-        if (order == null) return;
+        var order = await repository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Заказ с id {id} не найден");
 
         var works = new List<WorkType>();
         foreach (var workId in orderDto.WorkIds)

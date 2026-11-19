@@ -14,6 +14,16 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             await next(context);
         }
+        catch (KeyNotFoundException ex)
+        {
+            logger.LogWarning(ex, "Запрашиваемый ресурс не найден: {Message}", ex.Message);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+            var response = new { error = ex.Message };
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Произошла непредвиденная ошибка: {Message}", ex.Message);
