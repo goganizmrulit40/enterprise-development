@@ -13,10 +13,10 @@ public class ClientDto
     /// <summary>
     /// ФИО клиента.
     /// </summary>
-    public string FullName { get; set; } = string.Empty;
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Контактный телефон.
     /// </summary>
-    public string Phone { get; set; } = string.Empty;
+    public required string Phone { get; set; }
 }

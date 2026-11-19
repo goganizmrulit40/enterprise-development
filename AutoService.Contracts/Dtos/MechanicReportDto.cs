@@ -13,10 +13,10 @@ public class MechanicReportDto
     /// <summary>
     /// ФИО механика.
     /// </summary>
-    public string FullName { get; set; } = string.Empty;
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Специализация механика.
     /// </summary>
-    public string Specialization { get; set; } = string.Empty;
+    public required string Specialization { get; set; }
 }

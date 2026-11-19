@@ -8,7 +8,7 @@ public class LoginResponseDto
     /// <summary>
     /// JWT для доступа к API
     /// </summary>
-    public string Token { get; set; } = string.Empty;
+    public required string Token { get; set; }
 
     /// <summary>
     /// Дата и время окончания действия токена в UTC

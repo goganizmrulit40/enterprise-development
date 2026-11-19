@@ -13,17 +13,17 @@ public class MechanicDto
     /// <summary>
     /// ФИО механика.
     /// </summary>
-    public string FullName { get; set; } = string.Empty;
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Номер паспорта.
     /// </summary>
-    public string Passport { get; set; } = string.Empty;
+    public required string Passport { get; set; }
 
     /// <summary>
     /// Специализация.
     /// </summary>
-    public string Specialization { get; set; } = string.Empty;
+    public required string Specialization { get; set; }
 
     /// <summary>
     /// Стаж работы, г.
