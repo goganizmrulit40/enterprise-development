@@ -6,7 +6,12 @@ using Aspire.Hosting.Testing;
 
 namespace AutoService.IntegrationTests;
 
-public class ApiIntegrationTests(ITestOutputHelper output)
+/// <summary>
+/// Интеграционные тесты HTTP-эндпоинтов: запускаются против поднятого
+/// через Aspire приложения (см. <see cref="AspireAppFixture"/>).
+/// </summary>
+[Collection("Aspire integration")]
+public class ApiIntegrationTests(AspireAppFixture fixture, ITestOutputHelper output)
 {
     private static readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(120);
 
@@ -18,13 +23,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
     {
         using var cts = new CancellationTokenSource(_defaultTimeout);
 
-        output.WriteLine("Запуск оркестратора Aspire для теста машин...");
-
-        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AutoService_AppHost>(cts.Token);
-        await using var app = await appHost.BuildAsync(cts.Token);
-        await app.StartAsync(cts.Token);
-
-        var httpClient = app.CreateHttpClient("autoservice-api", "http");
+        var httpClient = fixture.App.CreateHttpClient("autoservice-api", "http");
 
         var unauthorizedResponse = await httpClient.GetAsync("/api/cars", cts.Token);
         Assert.Equal(HttpStatusCode.Unauthorized, unauthorizedResponse.StatusCode);
@@ -55,13 +54,7 @@ public class ApiIntegrationTests(ITestOutputHelper output)
     {
         using var cts = new CancellationTokenSource(_defaultTimeout);
 
-        output.WriteLine("Запуск оркестратора Aspire для теста аналитики...");
-
-        var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AutoService_AppHost>(cts.Token);
-        await using var app = await appHost.BuildAsync(cts.Token);
-        await app.StartAsync(cts.Token);
-
-        var httpClient = app.CreateHttpClient("autoservice-api", "http");
+        var httpClient = fixture.App.CreateHttpClient("autoservice-api", "http");
         await AuthorizeAsync(httpClient, cts.Token);
 
         output.WriteLine("Отправка запроса к Reports API...");
