@@ -14,13 +14,9 @@ using Microsoft.OpenApi;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddOpenApi(options =>
 {
-    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
@@ -28,10 +24,27 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Description = "Введите JWT, полученный через POST /api/auth/login"
-    });
-    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    };
+
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
-        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes["Bearer"] = securityScheme;
+        return Task.CompletedTask;
+    });
+
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        if (context.Description.RelativePath?.StartsWith("api/auth", StringComparison.OrdinalIgnoreCase) == true)
+            return Task.CompletedTask;
+
+        operation.Security ??= new List<OpenApiSecurityRequirement>();
+        operation.Security.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
+        });
+        return Task.CompletedTask;
     });
 });
 
@@ -75,8 +88,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+        options.SwaggerEndpoint("/openapi/v1.json", "AutoService API v1"));
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
