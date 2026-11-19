@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using AutoService.Contracts.Dtos;
 using Aspire.Hosting.Testing;
 
-namespace AutoService.Tests;
+namespace AutoService.IntegrationTests;
 
 public class ApiIntegrationTests(ITestOutputHelper output)
 {
